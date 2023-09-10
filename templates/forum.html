@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+
+<head>
+    <title>Messenger</title>
+    <link rel="stylesheet" href="../static/main.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+    <div>
+        <p>Tänne tulee keskustelualueet</p>
+    </div>
+
+    <div>
+        <p>Keskustelut</p>
+        <p>{{ topic }}</p>
+    </div>
+
+    <form action="/forum" method="POST">
+        Lisää keskustelu:
+        <input type="text" name="topic">
+        <br>
+        <input type="submit" value="Lisää">
+    </form>
+
+    <form action="/">
+        <input type="submit" value="Kirjaudu ulos" name="logout"/>
+    </form>
+</body>
