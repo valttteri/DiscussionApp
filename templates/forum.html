@@ -13,15 +13,14 @@
 
     <div>
         <p>Keskustelut</p>
-        <p>{{ topic }}</p>
+        <hr>
+        {% for message in messages %}
+        {{ message.content }}
+        <hr>
+        {% endfor %}
     </div>
 
-    <form action="/forum" method="POST">
-        Lisää keskustelu:
-        <input type="text" name="topic">
-        <br>
-        <input type="submit" value="Lisää">
-    </form>
+    <a href="/new">Uusi keskustelu</a>
 
     <form action="/">
         <input type="submit" value="Kirjaudu ulos" name="logout"/>
