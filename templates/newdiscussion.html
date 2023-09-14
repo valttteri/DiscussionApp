@@ -6,10 +6,15 @@
 </head>
 
 <body>
-    <form action="/send" method="POST">
+    <form action="/postdiscussion" method="POST">
         <h2>Uusi keskustelu</h2>
-        Aihe: <br>
-        <textarea name="content" rows="3" cols="40"></textarea>
+        Keskustelun aihe:
+        <br>
+        <input type="text" name="topic">
+        <br>
+        Kirjoita jotain:
+        <br>
+        <textarea name="comment" rows="3" cols="40"></textarea>
         <br>
         <input type="submit" value="Luo keskustelu">
     </form>

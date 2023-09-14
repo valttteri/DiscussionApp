@@ -14,21 +14,22 @@ db = SQLAlchemy(app)
 def index():
     return render_template('frontpage.html')
 
-#keskustelualueet
-@app.route('/forum', methods=['POST', 'GET'])
-def page2():
-    result = db.session.execute(text("SELECT content FROM messages"))
-    messages = result.fetchall()
-    return render_template('forum.html', messages=messages)
+@app.route('/forum', methods=['GET', 'POST'])
+def forum():
+    sql = text("SELECT topic, comment FROM discussions")
+    result = db.session.execute(sql)
+    discussions = result.fetchall()
+    return render_template("forum.html", discussions=discussions)
 
-@app.route("/new", methods=['GET', 'POST'])
+@app.route("/newdiscussion", methods=['GET', 'POST'])
 def new():
-    return render_template("new.html")
+    return render_template("newdiscussion.html")
 
-@app.route("/send", methods=["POST"])
-def send():
-    content = request.form["content"]
-    sql = text("INSERT INTO messages (content) VALUES (:content)")
-    db.session.execute(sql, {"content":content})
+@app.route("/postdiscussion", methods=["POST"])
+def postdiscussion():
+    topic = request.form["topic"]
+    comment = request.form["comment"]
+    sql = text("INSERT INTO discussions (topic, comment) VALUES (:topic, :comment)")
+    db.session.execute(sql, {"topic":topic, "comment":comment})
     db.session.commit()
     return redirect("/forum")

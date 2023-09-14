@@ -8,19 +8,19 @@
 
 <body>
     <div>
-        <p>Tänne tulee keskustelualueet</p>
+        <h2>Keskustelut</h2>
     </div>
 
     <div>
-        <p>Keskustelut</p>
         <hr>
-        {% for message in messages %}
-        {{ message.content }}
+        {% for discussion in discussions %}
+        Aihe: {{ discussion.topic }} <br>
+        Kommentti: {{ discussion.comment }} <br>
         <hr>
         {% endfor %}
     </div>
 
-    <a href="/new">Uusi keskustelu</a>
+    <a href="/newdiscussion">Uusi keskustelu</a>
 
     <form action="/">
         <input type="submit" value="Kirjaudu ulos" name="logout"/>
