@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<head>
+    <title>Messenger</title>
+    <link rel="stylesheet" href="../static/main.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+    <form action="/postcomment/{{ discussion.id }}" method="POST">
+        <h2>Uusi kommentti</h2>
+        Kirjoita jotain:
+        <br>
+        <textarea name="content" rows="3" cols="40"></textarea>
+        <br>
+        <input type="submit" value="Luo kommentti">
+        <br>
+        <hr>
+        Aihe: {{ discussion.topic }}
+        <br>
+        Vastaukset:<br>
+        {% for comment in comments %}
+        {{ comment.content }}<br>
+        {% endfor %}
+    </form>
+</body>

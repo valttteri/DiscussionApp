@@ -15,7 +15,18 @@
         <hr>
         {% for discussion in discussions %}
         Aihe: {{ discussion.topic }} <br>
-        Kommentti: {{ discussion.comment }} <br>
+        Keskustelun avaus: {{ discussion.comment }} <br>
+        <hr>
+        Vastaukset: <br>
+        {% for comment in comments %}
+        {% if discussion.id == comment.discussion_id %}
+        {{ comment.content }}<br>
+        {% endif %}
+        {% endfor %}
+        <hr>
+        <a href="/addcomment/{{ discussion.id }}">Lisää kommentti</a>
+        <br>
+        <a href="/remove/{{ discussion.id }}">Poista keskustelu</a>
         <hr>
         {% endfor %}
     </div>
