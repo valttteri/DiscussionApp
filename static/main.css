@@ -5,7 +5,9 @@ body {
     background-color: rgb(75, 204, 247);
 }
 
-div {
-    background-color: rgb(36, 129, 190);
-    max-width: 100%;
+hr {
+    background-color: black;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height: 3px;
 }

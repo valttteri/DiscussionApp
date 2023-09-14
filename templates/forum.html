@@ -14,16 +14,17 @@
     <div>
         <hr>
         {% for discussion in discussions %}
-        Aihe: {{ discussion.topic }} <br>
-        Keskustelun avaus: {{ discussion.comment }} <br>
-        <hr>
-        Vastaukset: <br>
+        <b>Aihe</b>: {{ discussion.topic }} <br>
+        <b>Keskustelun avaus</b>: {{ discussion.comment }} <br>
+    
+        <b>Vastaukset</b>:
+        {% set ns = namespace(c = 0) %}
         {% for comment in comments %}
-        {% if discussion.id == comment.discussion_id %}
-        {{ comment.content }}<br>
+            {% if discussion.id == comment.discussion_id %}
+            {% set ns.c = ns.c + 1 %}
         {% endif %}
         {% endfor %}
-        <hr>
+        {{ ns.c }} <br>
         <a href="/addcomment/{{ discussion.id }}">Lisää kommentti</a>
         <br>
         <a href="/remove/{{ discussion.id }}">Poista keskustelu</a>

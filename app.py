@@ -1,5 +1,5 @@
 from flask import Flask
-from flask import redirect, render_template, request
+from flask import redirect, render_template, request, url_for
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
 from os import getenv
@@ -48,12 +48,19 @@ def remove(id):
     db.session.commit()
     return redirect("/forum")
 
+@app.route("/removecomment/<int:id>")
+def removecomment(id):
+    sql = text("DELETE FROM comments WHERE id=:id")
+    db.session.execute(sql, {"id":id})
+    db.session.commit()
+    return redirect("/forum")
+
 @app.route("/addcomment/<int:id>")
 def addcomment(id):
     sql = text("SELECT topic, comment, id FROM discussions WHERE id=:id")
     result = db.session.execute(sql, {"id":id})
     discussion = result.fetchone()
-    sql = text("SELECT content FROM comments WHERE discussion_id=:id")
+    sql = text("SELECT id, content FROM comments WHERE discussion_id=:id")
     result = db.session.execute(sql, {"id":id})
     comments = result.fetchall()
     return render_template("newcomment.html", discussion=discussion, comments=comments)
