@@ -25,6 +25,15 @@
         {% endif %}
         {% endfor %}
         {{ ns.c }} <br>
+
+        <b>Keskustelun avaaja:</b>
+        {% for user in users %}
+            {% if user.id == discussion.creator_id %}
+            {{ user.username }}
+            {% endif %}
+        {% endfor %}
+        <br>
+
         <a href="/addcomment/{{ discussion.id }}">Lisää kommentti</a>
         <br>
         <a href="/remove/{{ discussion.id }}">Poista keskustelu</a>

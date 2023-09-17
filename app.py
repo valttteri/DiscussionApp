@@ -4,6 +4,9 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
 from os import getenv
 from werkzeug.security import check_password_hash, generate_password_hash
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
 
 app = Flask(__name__)
 url =  getenv("DATABASE_URL")
@@ -31,7 +34,9 @@ def login():
             session["username"] = username
             return redirect("/forum")
         else:
+            app.logger.info('väärä salasana')
             return redirect("/")
+    app.logger.info('käyttäjää ei löydy')
     return redirect("/")
 
 @app.route("/logout")
@@ -52,13 +57,19 @@ def createuser():
 #render the discussions
 @app.route('/forum', methods=['GET', 'POST'])
 def forum():
-    sql = text("SELECT topic, comment, id FROM discussions")
+    sql = text("SELECT id, topic, comment, creator_id FROM discussions")
     result = db.session.execute(sql)
     discussions = result.fetchall()
+
     sql = text("SELECT discussion_id, content FROM comments")
     result = db.session.execute(sql)
     comments = result.fetchall()
-    return render_template("forum.html", discussions=discussions, comments=comments)
+
+    sql = text("SELECT id, username FROM users")
+    result = db.session.execute(sql)
+    users = result.fetchall()
+
+    return render_template("forum.html", discussions=discussions, comments=comments, users=users)
 
 #add a new discussion
 @app.route("/newdiscussion", methods=['GET', 'POST'])
@@ -70,9 +81,17 @@ def new():
 def postdiscussion():
     topic = request.form["topic"]
     comment = request.form["comment"]
-    sql = text("INSERT INTO discussions (topic, comment) VALUES (:topic, :comment)")
-    db.session.execute(sql, {"topic":topic, "comment":comment})
+    username = session["username"]
+
+    sql = text("SELECT id FROM users where username=:username")
+    result = db.session.execute(sql, {"username":username})
+    user = result.fetchone()[0]
+    print(user)
+
+    sql = text("INSERT INTO discussions (topic, comment, creator_id) VALUES (:topic, :comment, :creator_id)")
+    db.session.execute(sql, {"topic":topic, "comment":comment, "creator_id":user})
     db.session.commit()
+
     return redirect("/forum")
 
 #function for removing a discussion
@@ -95,9 +114,11 @@ def addcomment(id):
     sql = text("SELECT topic, comment, id FROM discussions WHERE id=:id")
     result = db.session.execute(sql, {"id":id})
     discussion = result.fetchone()
+
     sql = text("SELECT id, content FROM comments WHERE discussion_id=:id")
     result = db.session.execute(sql, {"id":id})
     comments = result.fetchall()
+
     return render_template("newcomment.html", discussion=discussion, comments=comments)
 
 @app.route("/postcomment/<int:id>", methods=["POST"])
