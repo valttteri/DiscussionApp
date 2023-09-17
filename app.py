@@ -1,5 +1,5 @@
 from flask import Flask
-from flask import redirect, render_template, request, url_for
+from flask import redirect, render_template, request, session
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
 from os import getenv
@@ -8,11 +8,26 @@ app = Flask(__name__)
 url =  getenv("DATABASE_URL")
 app.config["SQLALCHEMY_DATABASE_URI"] = url
 db = SQLAlchemy(app)
+app.secret_key = getenv('SECRET_KEY')
 
 #front page
 @app.route('/', methods=['GET', 'POST'])
 def index():
     return render_template('frontpage.html')
+
+#log in to the application
+@app.route("/login",methods=["POST"])
+def login():
+    username = request.form["username"]
+    password = request.form["password"]
+    #check username and password
+    session["username"] = username
+    return redirect("/forum")
+
+@app.route("/logout")
+def logout():
+    del session["username"]
+    return redirect("/")
 
 #render the discussions
 @app.route('/forum', methods=['GET', 'POST'])

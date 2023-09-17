@@ -32,9 +32,13 @@
         {% endfor %}
     </div>
 
-    <a href="/newdiscussion">Uusi keskustelu</a>
-
-    <form action="/">
+    <a href="/newdiscussion">Uusi keskustelu</a><br>
+    {% if session.username %}
+    <div>
+        <p>Olet kirjautunut käyttäjällä {{ session.username }}</p>
+    </div>
+    {% endif %}
+    <form action="/logout">
         <input type="submit" value="Kirjaudu ulos" name="logout"/>
     </form>
 </body>
