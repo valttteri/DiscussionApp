@@ -9,12 +9,11 @@
     <div>
         {% for user in users %}
             {% if user.id == discussion.creator_id %}
-            {{ user.username }}
+            <h3>Käyttäjä {{ user.username }} kirjoitti
             {% endif %}
         {% endfor %}
-        <br>
         {{ discussion.time.strftime("%d.%m.%Y %H:%M:%S") }}
-        <br><br>
+        </h3>
         {{ discussion.comment }}
         <br>
         <hr>
@@ -34,7 +33,7 @@
         {% for comment in comments %}
             {% for user in users %}
                 {% if user.id == comment.creator_id %}
-                {{ user.username }} {{ comment.time.strftime("%d.%m.%Y %H:%M:%S") }}
+                <u>{{ user.username }} <i>{{ comment.time.strftime("%d.%m.%Y %H:%M:%S") }}</i></u>
                 <br> 
                 {{ comment.content }}
                     {% if user.username == logged_user %}

@@ -69,7 +69,9 @@ def forum():
     result = db.session.execute(sql)
     users = result.fetchall()
 
-    return render_template("forum.html", discussions=discussions, comments=comments, users=users)
+    logged_user = session["username"]
+
+    return render_template("forum.html", discussions=discussions, comments=comments, users=users, logged_user=logged_user)
 
 #add a new discussion
 @app.route("/newdiscussion", methods=['GET', 'POST'])

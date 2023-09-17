@@ -16,12 +16,11 @@
         {% for discussion in discussions %}
         {% for user in users %}
             {% if user.id == discussion.creator_id %}
-            <b>{{ user.username }}</b>
+            <u><b>{{ user.username }}</b>
             {% endif %}
         {% endfor %}
-        <br>
 
-        {{ discussion.time.strftime("%d.%m.%Y %H:%M:%S") }}
+        {{ discussion.time.strftime("%d.%m.%Y %H:%M:%S") }}</u>
         <br><br>
         {{ discussion.comment }}
         <br><br>
@@ -33,8 +32,15 @@
         {% endif %}
         {% endfor %}
         ({{ ns.c }})
+
         <br>
-        <a href="/remove/{{ discussion.id }}">Poista keskustelu</a>
+        {% for user in users %}
+            {% if user.id == discussion.creator_id %}
+                {% if user.username == logged_user %}
+                <a href="/remove/{{ discussion.id }}">Poista keskustelu</a>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
         <hr>
         {% endfor %}
     </div>
