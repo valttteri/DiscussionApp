@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<head>
+    <title>Messenger</title>
+    <link rel="stylesheet" href="../static/main.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+    <div>
+        {% for user in users %}
+            {% if user.id == discussion.creator_id %}
+            {{ user.username }}
+            {% endif %}
+        {% endfor %}
+        <br>
+        {{ discussion.time.strftime("%d.%m.%Y %H:%M:%S") }}
+        <br><br>
+        {{ discussion.comment }}
+        <br>
+        <hr>
+    </div>
+    <form action="/postcomment/{{ discussion.id }}" method="POST">
+        <textarea name="content" rows="3" cols="40" placeholder="Uusi kommentti"></textarea>
+        <br>
+        <input type="submit" value="Kommentoi">
+        <br>
+    </form>
+    <form action="/forum">
+        <input type="submit" value="Takaisin" name="return"/>
+    </form>
+    <div>
+        <hr>
+        <b>Kommentit:</b><br>
+        {% for comment in comments %}
+            {% for user in users %}
+                {% if user.id == comment.creator_id %}
+                {{ user.username }} {{ comment.time.strftime("%d.%m.%Y %H:%M:%S") }}
+                <br> 
+                {{ comment.content }}
+                    {% if user.username == logged_user %}
+                    <br>
+                    <a href="/removecomment/{{ comment.id }}">Poista kommentti</a>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        <br><br>
+        {% endfor %}
+    </div>
+</body>

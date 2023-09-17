@@ -2,13 +2,16 @@ CREATE TABLE discussions (
     id SERIAL PRIMARY KEY,
     topic TEXT,
     comment TEXT,
-    creator_id INTEGER REFERENCES users
+    creator_id INTEGER REFERENCES users,
+    time TIMESTAMP
 );
 
 CREATE TABLE comments (
     id SERIAL PRIMARY KEY,
     discussion_id INTEGER REFERENCES discussions ON DELETE CASCADE,
-    content TEXT
+    content TEXT,
+    creator_id INTEGER,
+    time TIMESTAMP
 );
 
 CREATE TABLE users (

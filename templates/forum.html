@@ -14,27 +14,25 @@
     <div>
         <hr>
         {% for discussion in discussions %}
-        <b>Aihe</b>: {{ discussion.topic }} <br>
-        <b>Keskustelun avaus</b>: {{ discussion.comment }} <br>
-    
-        <b>Vastaukset</b>:
+        {% for user in users %}
+            {% if user.id == discussion.creator_id %}
+            <b>{{ user.username }}</b>
+            {% endif %}
+        {% endfor %}
+        <br>
+
+        {{ discussion.time.strftime("%d.%m.%Y %H:%M:%S") }}
+        <br><br>
+        {{ discussion.comment }}
+        <br><br>
+        <a href="/addcomment/{{ discussion.id }}">Kommentit</a>
         {% set ns = namespace(c = 0) %}
         {% for comment in comments %}
             {% if discussion.id == comment.discussion_id %}
             {% set ns.c = ns.c + 1 %}
         {% endif %}
         {% endfor %}
-        {{ ns.c }} <br>
-
-        <b>Keskustelun avaaja:</b>
-        {% for user in users %}
-            {% if user.id == discussion.creator_id %}
-            {{ user.username }}
-            {% endif %}
-        {% endfor %}
-        <br>
-
-        <a href="/addcomment/{{ discussion.id }}">Lisää kommentti</a>
+        ({{ ns.c }})
         <br>
         <a href="/remove/{{ discussion.id }}">Poista keskustelu</a>
         <hr>

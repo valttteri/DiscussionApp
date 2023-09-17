@@ -1,5 +1,5 @@
 from flask import Flask
-from flask import redirect, render_template, request, session
+from flask import redirect, render_template, request, session, url_for
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
 from os import getenv
@@ -57,15 +57,15 @@ def createuser():
 #render the discussions
 @app.route('/forum', methods=['GET', 'POST'])
 def forum():
-    sql = text("SELECT id, topic, comment, creator_id FROM discussions")
+    sql = text("SELECT * FROM discussions")
     result = db.session.execute(sql)
     discussions = result.fetchall()
 
-    sql = text("SELECT discussion_id, content FROM comments")
+    sql = text("SELECT * FROM comments")
     result = db.session.execute(sql)
     comments = result.fetchall()
 
-    sql = text("SELECT id, username FROM users")
+    sql = text("SELECT * FROM users")
     result = db.session.execute(sql)
     users = result.fetchall()
 
@@ -86,9 +86,8 @@ def postdiscussion():
     sql = text("SELECT id FROM users where username=:username")
     result = db.session.execute(sql, {"username":username})
     user = result.fetchone()[0]
-    print(user)
 
-    sql = text("INSERT INTO discussions (topic, comment, creator_id) VALUES (:topic, :comment, :creator_id)")
+    sql = text("INSERT INTO discussions (topic, comment, creator_id, time) VALUES (:topic, :comment, :creator_id, NOW())")
     db.session.execute(sql, {"topic":topic, "comment":comment, "creator_id":user})
     db.session.commit()
 
@@ -104,27 +103,43 @@ def remove(id):
 
 @app.route("/removecomment/<int:id>")
 def removecomment(id):
-    sql = text("DELETE FROM comments WHERE id=:id")
-    db.session.execute(sql, {"id":id})
+    
+    sql = text("DELETE FROM comments WHERE id=:id RETURNING discussion_id")
+    result = db.session.execute(sql, {"id":id})
+    discussion = result.fetchone()[0]
+    print(discussion)
     db.session.commit()
-    return redirect("/forum")
 
-@app.route("/addcomment/<int:id>")
+    return redirect(url_for('addcomment', id=discussion))
+
+@app.route("/addcomment/<int:id>", methods=['GET', 'POST'])
 def addcomment(id):
-    sql = text("SELECT topic, comment, id FROM discussions WHERE id=:id")
+    sql = text("SELECT * FROM discussions WHERE id=:id")
     result = db.session.execute(sql, {"id":id})
     discussion = result.fetchone()
 
-    sql = text("SELECT id, content FROM comments WHERE discussion_id=:id")
+    sql = text("SELECT * FROM comments WHERE discussion_id=:id")
     result = db.session.execute(sql, {"id":id})
     comments = result.fetchall()
 
-    return render_template("newcomment.html", discussion=discussion, comments=comments)
+    sql = text("SELECT id, username FROM users")
+    result = db.session.execute(sql, {"id":id})
+    users = result.fetchall()
+
+    logged_user = session["username"]
+
+    return render_template("addcomment.html", discussion=discussion, comments=comments, users=users, logged_user=logged_user)
 
 @app.route("/postcomment/<int:id>", methods=["POST"])
 def postcomment(id):
     content = request.form["content"]
-    sql = text("INSERT INTO comments (discussion_id, content) VALUES (:id, :content)")
-    db.session.execute(sql, {"content":content, "id": id})
+    username = session["username"]
+
+    sql = text("SELECT id FROM users where username=:username")
+    result = db.session.execute(sql, {"username":username})
+    user = result.fetchone()[0]
+
+    sql = text("INSERT INTO comments (discussion_id, content, creator_id, time) VALUES (:id, :content, :creator_id, NOW())")
+    db.session.execute(sql, {"content":content, "id": id, "creator_id":user})
     db.session.commit()
-    return redirect("/forum")
+    return redirect(url_for('addcomment', id=id))
