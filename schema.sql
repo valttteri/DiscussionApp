@@ -19,3 +19,8 @@ CREATE TABLE users (
     username TEXT,
     password TEXT
 );
+
+CREATE TABLE topics (
+    id SERIAL PRIMARY KEY,
+    name TEXT
+);

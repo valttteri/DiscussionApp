@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+
+<head>
+    <title>Messenger</title>
+    <link rel="stylesheet" href="../static/main.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+    <h2>Keskustelualueet</h2>
+    <hr>
+    <div>
+        {% for topic in topics %}
+            {{ topic.name }}
+            <a href="/forum/{{ topic.id }}">Keskustelut</a>
+        <hr>
+        {% endfor %}
+    </div>
+
+    {% if session.username %}
+    <div>
+    Olet kirjautunut käyttäjällä {{ session.username }}
+    </div>
+    {% endif %}
+
+    <form action="/logout">
+        <input type="submit" value="Kirjaudu ulos" name="logout"/>
+    </form>
+</body>

@@ -22,7 +22,7 @@
 
         {{ discussion.time.strftime("%d.%m.%Y %H:%M:%S") }}</u>
         <br><br>
-        {{ discussion.comment }}
+        {{ discussion.comment }} <b>#{{ discussion.topic }}</b>
         <br><br>
         <a href="/addcomment/{{ discussion.id }}">Kommentit</a>
         {% set ns = namespace(c = 0) %}
@@ -32,7 +32,6 @@
         {% endif %}
         {% endfor %}
         ({{ ns.c }})
-
         <br>
         {% for user in users %}
             {% if user.id == discussion.creator_id %}
@@ -45,12 +44,16 @@
         {% endfor %}
     </div>
 
-    <a href="/newdiscussion">Uusi keskustelu</a><br>
+    <a href="/newdiscussion/{{ topic_id }}">Uusi keskustelu</a><br>
     {% if session.username %}
     <div>
         <p>Olet kirjautunut käyttäjällä {{ session.username }}</p>
     </div>
     {% endif %}
+    <form action="/topics">
+        <input type="submit" value="Takaisin" name="topics"/>
+    </form>
+    <br>
     <form action="/logout">
         <input type="submit" value="Kirjaudu ulos" name="logout"/>
     </form>

@@ -6,7 +6,7 @@
 </head>
 
 <body>
-    <form action="/postdiscussion" method="POST">
+    <form action="/postdiscussion/{{ return_id }}" method="POST">
         <h2>Uusi keskustelu</h2>
         Keskustelun aihe:
         <br>
@@ -18,7 +18,7 @@
         <br>
         <input type="submit" value="Luo keskustelu">
     </form>
-    <form action="/forum">
+    <form action="/forum/{{ return_id }}">
         <input type="submit" value="Takaisin" name="return"/>
     </form>
 </body>

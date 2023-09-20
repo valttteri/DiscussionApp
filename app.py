@@ -32,7 +32,7 @@ def login():
         password_hash = user.password
         if check_password_hash(password_hash, password):
             session["username"] = username
-            return redirect("/forum")
+            return redirect("/topics")
         else:
             app.logger.info('väärä salasana')
             return redirect("/")
@@ -54,11 +54,30 @@ def createuser():
     db.session.commit()
     return redirect("/")
 
-#render the discussions
-@app.route('/forum', methods=['GET', 'POST'])
-def forum():
+@app.route("/topics", methods=['GET', 'POST'])
+def topics():
+    sql = text("SELECT * FROM topics")
+    result = db.session.execute(sql)
+    topics = result.fetchall()
+    logged_user = session["username"]
+
     sql = text("SELECT * FROM discussions")
     result = db.session.execute(sql)
+    discussions = result.fetchall()
+
+    return render_template('topics.html', topics=topics, discussions=discussions, logged_user=logged_user)
+
+#render the discussions
+@app.route('/forum/<int:id>', methods=['GET', 'POST'])
+def forum(id):
+    sql = text("SELECT name, id FROM topics WHERE id=:id")
+    result = db.session.execute(sql, {"id":id})
+    topic = result.fetchone()
+    topic_name = topic[0]
+    topic_id = topic[1]
+
+    sql = text("SELECT * FROM discussions WHERE topic=:topic")
+    result = db.session.execute(sql, {"topic":topic_name})
     discussions = result.fetchall()
 
     sql = text("SELECT * FROM comments")
@@ -71,16 +90,20 @@ def forum():
 
     logged_user = session["username"]
 
-    return render_template("forum.html", discussions=discussions, comments=comments, users=users, logged_user=logged_user)
+    return render_template("forum.html", discussions=discussions, comments=comments, users=users, logged_user=logged_user, topic_id=topic_id)
 
 #add a new discussion
-@app.route("/newdiscussion", methods=['GET', 'POST'])
-def new():
-    return render_template("newdiscussion.html")
+@app.route("/newdiscussion/<int:id>", methods=['GET', 'POST'])
+def new(id):
+    sql = text("SELECT id FROM topics WHERE id=:id")
+    result = db.session.execute(sql, {"id":id})
+    return_id = result.fetchone()[0]
+
+    return render_template("newdiscussion.html", return_id=return_id)
 
 #function for saving a new discussion
-@app.route("/postdiscussion", methods=["POST"])
-def postdiscussion():
+@app.route("/postdiscussion/<int:id>", methods=["POST"])
+def postdiscussion(id):
     topic = request.form["topic"]
     comment = request.form["comment"]
     username = session["username"]
@@ -93,15 +116,21 @@ def postdiscussion():
     db.session.execute(sql, {"topic":topic, "comment":comment, "creator_id":user})
     db.session.commit()
 
-    return redirect("/forum")
+    return redirect(url_for('forum', id=id))
 
 #function for removing a discussion
 @app.route("/remove/<int:id>")
 def remove(id):
-    sql = text("DELETE FROM discussions WHERE id=:id")
-    db.session.execute(sql, {"id":id})
+    sql = text("DELETE FROM discussions WHERE id=:id RETURNING topic")
+    result = db.session.execute(sql, {"id":id})
+    discussion_topic = result.fetchone()[0]
     db.session.commit()
-    return redirect("/forum")
+
+    sql = text("SELECT id FROM topics WHERE name=:name")
+    result = db.session.execute(sql, {"name":discussion_topic})
+    return_id = result.fetchone()[0]
+
+    return redirect(url_for('forum', id=return_id))
 
 @app.route("/removecomment/<int:id>")
 def removecomment(id):
@@ -109,7 +138,6 @@ def removecomment(id):
     sql = text("DELETE FROM comments WHERE id=:id RETURNING discussion_id")
     result = db.session.execute(sql, {"id":id})
     discussion = result.fetchone()[0]
-    print(discussion)
     db.session.commit()
 
     return redirect(url_for('addcomment', id=discussion))
@@ -130,7 +158,7 @@ def addcomment(id):
 
     logged_user = session["username"]
 
-    return render_template("addcomment.html", discussion=discussion, comments=comments, users=users, logged_user=logged_user)
+    return render_template("addcomment.html", discussion=discussion, comments=comments, users=users, logged_user=logged_user, return_id = discussion[3])
 
 @app.route("/postcomment/<int:id>", methods=["POST"])
 def postcomment(id):
