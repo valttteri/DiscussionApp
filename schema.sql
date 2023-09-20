@@ -3,7 +3,8 @@ CREATE TABLE discussions (
     topic TEXT,
     comment TEXT,
     creator_id INTEGER REFERENCES users,
-    time TIMESTAMP
+    time TIMESTAMP,
+    title TEXT
 );
 
 CREATE TABLE comments (

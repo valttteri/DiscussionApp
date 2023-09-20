@@ -126,6 +126,45 @@ def postdiscussion(id):
 
     return redirect(url_for('forum', id=id))
 
+@app.route("/updatediscussion/<int:id>", methods=["GET", "POST"])
+def updatediscussion(id):
+    sql = text("SELECT topic FROM discussions where id=:id")
+    result = db.session.execute(sql, {"id":id})
+    discussion_topic = result.fetchone()[0]
+
+    sql = text("SELECT id FROM topics WHERE name=:name")
+    result = db.session.execute(sql, {"name":discussion_topic})
+    topic_id = result.fetchone()[0]
+
+    return render_template("updatediscussion.html", discussion_id=id, topic_id=topic_id)
+
+@app.route("/postdiscussionupdate/<int:id>", methods=["GET", "POST"])
+def postdiscussionupdate(id):
+    sql = text("SELECT topic FROM discussions WHERE id=:id")
+    result = db.session.execute(sql, {"id":id})
+    discussion_topic = result.fetchone()[0]
+
+    sql = text("SELECT id FROM topics WHERE name=:name")
+    result = db.session.execute(sql, {"name":discussion_topic})
+    topic_id = result.fetchone()[0]
+
+    title = request.form["title"]
+    comment = request.form["comment"]
+
+    if len(comment) == 0:
+        return redirect(url_for('updatediscussion', id=id))
+
+    if len(title) == 0:
+        sql = text("UPDATE discussions SET comment=:comment WHERE id=:id")
+        db.session.execute(sql, {"comment":comment, "id":id})
+        db.session.commit()
+    else:
+        sql = text("UPDATE discussions SET comment=:comment, title=:title WHERE id=:id")
+        db.session.execute(sql, {"comment":comment, "title":title, "id":id})
+        db.session.commit()
+    
+    return redirect(url_for('forum', id=topic_id))
+
 #function for removing a discussion
 @app.route("/remove/<int:id>")
 def remove(id):
