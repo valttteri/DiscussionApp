@@ -56,7 +56,7 @@ def createuser():
 
 @app.route("/topics", methods=['GET', 'POST'])
 def topics():
-    sql = text("SELECT * FROM topics")
+    sql = text("SELECT * FROM topics ORDER BY name")
     result = db.session.execute(sql)
     topics = result.fetchall()
     logged_user = session["username"]
@@ -64,7 +64,7 @@ def topics():
     sql = text("SELECT * FROM discussions")
     result = db.session.execute(sql)
     discussions = result.fetchall()
-
+    
     return render_template('topics.html', topics=topics, discussions=discussions, logged_user=logged_user)
 
 #render the discussions
@@ -119,6 +119,10 @@ def postdiscussion(id):
     sql = text("SELECT id FROM users where username=:username")
     result = db.session.execute(sql, {"username":username})
     user = result.fetchone()[0]
+
+    sql = text("UPDATE topics SET lastactivity=NOW() WHERE id=:id")
+    db.session.execute(sql, {"id":id})
+    db.session.commit()
 
     sql = text("INSERT INTO discussions (topic, comment, creator_id, title, time) VALUES (:topic, :comment, :creator_id, :title, NOW())")
     db.session.execute(sql, {"topic":topic, "comment":comment, "creator_id":user, "title":title})

@@ -11,23 +11,25 @@
     <hr>
     <div>
         {% for topic in topics %}
-
             {% set ns = namespace(c = 0) %}
             {% for discussion in discussions %}
                 {% if topic.name == discussion.topic %}
-                {% set ns.c = ns.c + 1 %}
-            {% endif %}
+                    {% set ns.c = ns.c + 1 %}
+                {% endif %}
             {% endfor %}
             
             <a href="/forum/{{ topic.id }}">{{ topic.name }}</a> ({{ ns.c }})
+            <br>
+            {% if topic.lastactivity is not none %}
+                Aktiivinen viimeksi: {{ topic.lastactivity.strftime("%d.%m.%Y %H:%M:%S") }}
+            {% endif %}
         <hr>
         {% endfor %}
     </div>
-
     {% if session.username %}
-    <div>
-    Olet kirjautunut käyttäjällä {{ session.username }}
-    </div>
+        <div>
+        Olet kirjautunut käyttäjällä {{ session.username }}
+        </div>
     {% endif %}
 
     <form action="/logout">
