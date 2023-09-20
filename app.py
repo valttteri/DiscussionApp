@@ -90,7 +90,7 @@ def forum(id):
 
     logged_user = session["username"]
 
-    return render_template("forum.html", discussions=discussions, comments=comments, users=users, logged_user=logged_user, topic_id=topic_id)
+    return render_template("forum.html", discussions=discussions, comments=comments, users=users, logged_user=logged_user, topic_name=topic_name, topic_id=topic_id)
 
 #add a new discussion
 @app.route("/newdiscussion/<int:id>", methods=['GET', 'POST'])
@@ -99,12 +99,20 @@ def new(id):
     result = db.session.execute(sql, {"id":id})
     return_id = result.fetchone()[0]
 
-    return render_template("newdiscussion.html", return_id=return_id)
+    sql = text("SELECT name FROM topics WHERE id=:id")
+    result = db.session.execute(sql, {"id":id})
+    topic = result.fetchone()[0]
+
+    return render_template("newdiscussion.html", return_id=return_id, topic=topic)
 
 #function for saving a new discussion
 @app.route("/postdiscussion/<int:id>", methods=["POST"])
 def postdiscussion(id):
-    topic = request.form["topic"]
+    sql = text("SELECT name FROM topics WHERE id=:id")
+    result = db.session.execute(sql, {"id":id})
+    topic = result.fetchone()[0]
+
+    #topic = request.form["topic"]
     comment = request.form["comment"]
     username = session["username"]
 

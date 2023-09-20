@@ -8,7 +8,7 @@
 
 <body>
     <div>
-        <h2>Keskustelut</h2>
+        <h2>{{ topic_name }}</h2>
     </div>
 
     <div>
@@ -22,7 +22,7 @@
 
         {{ discussion.time.strftime("%d.%m.%Y %H:%M:%S") }}</u>
         <br><br>
-        {{ discussion.comment }} <b>#{{ discussion.topic }}</b>
+        {{ discussion.comment }}
         <br><br>
         <a href="/addcomment/{{ discussion.id }}">Kommentit</a>
         {% set ns = namespace(c = 0) %}
