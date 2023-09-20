@@ -22,6 +22,8 @@
 
         {{ discussion.time.strftime("%d.%m.%Y %H:%M:%S") }}</u>
         <br><br>
+        <b>{{ discussion.title }}</b>
+        <br>
         {{ discussion.comment }}
         <br><br>
         <a href="/addcomment/{{ discussion.id }}">Kommentit</a>

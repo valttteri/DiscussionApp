@@ -112,7 +112,7 @@ def postdiscussion(id):
     result = db.session.execute(sql, {"id":id})
     topic = result.fetchone()[0]
 
-    #topic = request.form["topic"]
+    title = request.form["title"]
     comment = request.form["comment"]
     username = session["username"]
 
@@ -120,8 +120,8 @@ def postdiscussion(id):
     result = db.session.execute(sql, {"username":username})
     user = result.fetchone()[0]
 
-    sql = text("INSERT INTO discussions (topic, comment, creator_id, time) VALUES (:topic, :comment, :creator_id, NOW())")
-    db.session.execute(sql, {"topic":topic, "comment":comment, "creator_id":user})
+    sql = text("INSERT INTO discussions (topic, comment, creator_id, title, time) VALUES (:topic, :comment, :creator_id, :title, NOW())")
+    db.session.execute(sql, {"topic":topic, "comment":comment, "creator_id":user, "title":title})
     db.session.commit()
 
     return redirect(url_for('forum', id=id))
