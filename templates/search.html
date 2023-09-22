@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<head>
+    <title>Messenger</title>
+    <link rel="stylesheet" href="../static/main.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+    <div>
+    <h2>Hakutulokset:</h2>
+    <br>
+    {% for discussion in discussions %}
+        <b>{{ discussion.title }}</b>
+        <br>
+        {{ discussion.comment }}
+        <br>
+        <i>Julkaistu keskustelualueella {{ discussion.topic }} {{ discussion.time.strftime("%d.%m.%Y %H:%M:%S") }}</i>
+        <hr>
+    {% endfor %}
+
+    {% for comment in comments %}
+        {% for discussion in all_discussions %}
+            {% if comment.discussion_id == discussion.id %}
+                {{ comment.content }}
+                <br>
+                <i>Käyttäjän {{ comment.creator_name }} kommentti
+                keskustelussa "{{ discussion.title }}" ({{ discussion.topic }})
+                </i>
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+    <hr>
+    </div>
+    <a href="/topics">Takaisin</a>
+</body>

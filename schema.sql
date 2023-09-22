@@ -12,7 +12,8 @@ CREATE TABLE comments (
     discussion_id INTEGER REFERENCES discussions ON DELETE CASCADE,
     content TEXT,
     creator_id INTEGER,
-    time TIMESTAMP
+    time TIMESTAMP,
+    creator_name TEXT
 );
 
 CREATE TABLE users (
@@ -23,5 +24,6 @@ CREATE TABLE users (
 
 CREATE TABLE topics (
     id SERIAL PRIMARY KEY,
-    name TEXT
+    name TEXT,
+    lastactivity TIMESTAMP
 );

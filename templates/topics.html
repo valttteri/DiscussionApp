@@ -8,6 +8,12 @@
 
 <body>
     <h2>Keskustelualueet</h2>
+    Etsi sivulta
+    <form action="/search" method="POST">
+        <textarea name="content" rows="2" cols="40"></textarea>
+        <input type="submit" value="Etsi">
+        <br>
+    </form>
     <hr>
     <div>
         {% for topic in topics %}
