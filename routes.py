@@ -89,6 +89,9 @@ def posttopic():
 # render the discussions
 @app.route("/forum/<int:id>", methods=["GET", "POST"])
 def forum(id):
+    if len(session) == 0:
+        return redirect("/")
+
     sql = text("SELECT name, id FROM topics WHERE id=:id")
     result = db.session.execute(sql, {"id": id})
     topic = result.fetchone()

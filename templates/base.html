@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
+<div class="header">
+    <h2>Keskustelusovellus</h2>
+</div>
+
 <body>
 
     {% block content %}
@@ -22,9 +26,8 @@
             (ylläpitäjä)
         {% endif %}
         </div>
+        <form action="/logout">
+            <input type="submit" value="Kirjaudu ulos" name="logout"/>
+        </form>
     {% endif %}
-
-    <form action="/logout">
-        <input type="submit" value="Kirjaudu ulos" name="logout"/>
-    </form>
 </footer>

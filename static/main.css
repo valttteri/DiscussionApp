@@ -1,7 +1,35 @@
 body {
-    padding-left: 20px;
+    margin: 0;
     font-family: 'Helvetica', 'Arial', sans-serif;
-    background-color: rgb(75, 204, 247);
+    background-color: #EEEEEE;
+}
+
+.header {
+    background: #888888;
+    position: relative;
+    padding-top: 0.75em;
+    padding-left: 1.5em;
+    padding-bottom: 0.75em;
+    border-bottom: solid;
+    border-top: solid;
+}
+
+.loginform {
+    padding: 2em;
+    margin: auto;
+    display: grid;
+    grid-row-gap: .3em;
+    grid-template-columns: 12em;
+}
+
+.logintext {
+    width: 20em;
+    height: 20em
+}
+
+.frontpage {
+    display: flex;
+    float: left;
 }
 
 hr {

@@ -1,22 +1,21 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Keskustelusovellus</h1>
+    
+   <div class="frontpage">
+        <form class="loginform" action="/login" method="POST">
+            <label for="username">Kirjaudu sisään:</label>
+            <input type="text" name="username" placeholder="Käyttäjätunnus">
+            <input type="password" name="password" placeholder="Salasana">
+            <input type="submit" value="Kirjaudu">
+        </form>
 
-    <div>
-        <p>tervetuloa</p>
-        <p>täällä keskustellaan kaikesta ja kaikista</p>
-        <img src="https://images.fineartamerica.com/images-medium-large-5/computer-cat-andee-photography.jpg" alt="computer cat" style="width:300px;height:200px;"/>
-    </div>
-
-    <form action="/login" method="POST">
-        Kirjaudu sisään:<br>
-        <input type="text" name="username" placeholder="Käyttäjätunnus">
-        <br>
-        <input type="password" name="password" placeholder="Salasana">
-        <br>
-        <input type="submit" value="Kirjaudu">
-    </form>
+        <div>
+            <p>Hei ja tervetuloa! Täällä keskustellaan kaikesta ja kaikista.
+            </p>
+        </div>
+   </div>
+    <!--
     <form action="/createuser" method="POST">
         Uusi käyttäjä?:<br>
         <input type="text" name="username" placeholder="Käyttäjätunnus">
@@ -24,5 +23,5 @@
         <input type="password" name="password" placeholder="Salasana">
         <br>
         <input type="submit" value="Luo käyttäjä">
-    </form>
+    </form> -->
 {% endblock %}
