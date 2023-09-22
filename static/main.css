@@ -1,6 +1,5 @@
 body {
-    margin: auto;
-    max-width: 45em;
+    padding-left: 20px;
     font-family: 'Helvetica', 'Arial', sans-serif;
     background-color: rgb(75, 204, 247);
 }
@@ -10,4 +9,8 @@ hr {
     margin-top: 10px;
     margin-bottom: 10px;
     height: 3px;
+}
+
+footer {
+    display: block;
 }

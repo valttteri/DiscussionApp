@@ -2,9 +2,8 @@
 
 {% block content%}
     <h2>Keskustelualueet</h2>
-    Etsi sivulta
     <form action="/search" method="POST">
-        <textarea name="content" rows="2" cols="40"></textarea>
+        <textarea name="content" rows="2" cols="40" placeholder="Etsi sivulta"></textarea>
         <input type="submit" value="Etsi">
         <br>
     </form>
@@ -23,16 +22,14 @@
             {% if topic.lastactivity is not none %}
                 Aktiivinen viimeksi: {{ topic.lastactivity.strftime("%d.%m.%Y %H:%M:%S") }}
             {% endif %}
+            
+            {% if session.admin %}
+                <a href="/removetopic/{{ topic.id }}">Poista keskustelualue</a>
+            {% endif %}
         <hr>
         {% endfor %}
     </div>
-    {% if session.username %}
-        <div>
-        Olet kirjautunut käyttäjällä {{ session.username }}
-        </div>
+    {% if session.admin %}
+        <a href="/newtopic">Uusi keskustelualue</a> 
     {% endif %}
-
-    <form action="/logout">
-        <input type="submit" value="Kirjaudu ulos" name="logout"/>
-    </form>
 {% endblock %}

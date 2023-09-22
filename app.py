@@ -18,6 +18,9 @@ app.secret_key = getenv("SECRET_KEY")
 # front page
 @app.route("/", methods=["GET", "POST"])
 def index():
+    if len(session) != 0:
+        return redirect("/topics")
+
     return render_template("frontpage.html")
 
 
@@ -26,14 +29,16 @@ def index():
 def login():
     username = request.form["username"]
     password = request.form["password"]
-    sql = text("SELECT id, password FROM users WHERE username=:username")
+    sql = text("SELECT * FROM users WHERE username=:username")
     result = db.session.execute(sql, {"username": username})
     user = result.fetchone()
+    admin = user[-1]
 
     if user:
         password_hash = user.password
         if check_password_hash(password_hash, password):
             session["username"] = username
+            session["admin"] = admin
             return redirect("/topics")
         else:
             app.logger.info("väärä salasana")
@@ -45,6 +50,7 @@ def login():
 @app.route("/logout")
 def logout():
     del session["username"]
+    del session["admin"]
     return redirect("/")
 
 
@@ -53,7 +59,9 @@ def createuser():
     username = request.form["username"]
     password = request.form["password"]
     hash_value = generate_password_hash(password)
-    sql = text("INSERT INTO users (username, password) VALUES (:username, :password)")
+    sql = text(
+        "INSERT INTO users (username, password, admin) VALUES (:username, :password, 'FALSE')"
+    )
     db.session.execute(sql, {"username": username, "password": hash_value})
     db.session.commit()
     return redirect("/")
@@ -64,16 +72,32 @@ def topics():
     sql = text("SELECT * FROM topics ORDER BY name")
     result = db.session.execute(sql)
     topics = result.fetchall()
-    logged_user = session["username"]
 
     sql = text("SELECT * FROM discussions")
     result = db.session.execute(sql)
     discussions = result.fetchall()
 
-    return render_template(
-        "topics.html", topics=topics, discussions=discussions, logged_user=logged_user
-    )
+    return render_template("topics.html", topics=topics, discussions=discussions)
 
+
+@app.route("/newtopic", methods=["GET", "POST"])
+def newtopic():
+    if len(session) == 0:
+        return redirect("/")
+    if not session["admin"]:
+        return redirect("/topics")
+    
+    return render_template("newtopic.html")
+
+@app.route("/posttopic", methods=["POST"])
+def posttopic():
+    topic = request.form["topic"]
+
+    sql = text("INSERT INTO topics (name, lastactivity) VALUES (:name, NOW())")
+    db.session.execute(sql, {"name": topic})
+    db.session.commit()
+
+    return redirect("/topics")
 
 # render the discussions
 @app.route("/forum/<int:id>", methods=["GET", "POST"])
@@ -122,10 +146,10 @@ def new(id):
 
     return render_template("newdiscussion.html", return_id=return_id, topic=topic)
 
-
-# function for saving a new discussion
 @app.route("/postdiscussion/<int:id>", methods=["POST"])
 def postdiscussion(id):
+    """Save a new discussion to database"""
+
     sql = text("SELECT name FROM topics WHERE id=:id")
     result = db.session.execute(sql, {"id": id})
     topic = result.fetchone()[0]
@@ -142,9 +166,8 @@ def postdiscussion(id):
     db.session.execute(sql, {"id": id})
     db.session.commit()
 
-    sql = text(
-        "INSERT INTO discussions (topic, comment, creator_id, title, time) VALUES (:topic, :comment, :creator_id, :title, NOW())"
-    )
+    sql = text("""INSERT INTO discussions (topic, comment, creator_id, title, time) 
+               VALUES (:topic, :comment, :creator_id, :title, NOW())""")
     db.session.execute(
         sql, {"topic": topic, "comment": comment, "creator_id": user, "title": title}
     )
@@ -155,8 +178,10 @@ def postdiscussion(id):
 
 @app.route("/updatediscussion/<int:id>", methods=["GET", "POST"])
 def updatediscussion(id):
+    """Update a discussion"""
+
     sql = text("SELECT topic FROM discussions where id=:id")
-    result = db.session.execute(sql, {"id":id})
+    result = db.session.execute(sql, {"id": id})
     discussion_topic = result.fetchone()[0]
 
     sql = text("SELECT id FROM topics WHERE name=:name")
@@ -168,6 +193,8 @@ def updatediscussion(id):
 
 @app.route("/postdiscussionupdate/<int:id>", methods=["GET", "POST"])
 def postdiscussionupdate(id):
+    """Save an updated discussion to database"""
+
     sql = text("SELECT topic FROM discussions WHERE id=:id")
     result = db.session.execute(sql, {"id": id})
     discussion_topic = result.fetchone()[0]
@@ -193,10 +220,10 @@ def postdiscussionupdate(id):
 
     return redirect(url_for("forum", id=topic_id))
 
-
-# function for removing a discussion
 @app.route("/remove/<int:id>")
 def remove(id):
+    """Remove a discussion"""
+
     sql = text("DELETE FROM discussions WHERE id=:id RETURNING topic")
     result = db.session.execute(sql, {"id": id})
     discussion_topic = result.fetchone()[0]
@@ -218,6 +245,19 @@ def removecomment(id):
 
     return redirect(url_for("addcomment", id=discussion))
 
+@app.route("/removetopic/<int:id>")
+def removetopic(id):
+    if len(session) == 0:
+        return redirect("/")
+    if not session["admin"]:
+        return redirect("/topics")
+
+    sql = text("DELETE FROM topics WHERE id=:id")
+    db.session.execute(sql, {"id": id})
+    db.session.commit()
+
+    return redirect("/topics")
+
 
 @app.route("/addcomment/<int:id>", methods=["GET", "POST"])
 def addcomment(id):
@@ -229,8 +269,8 @@ def addcomment(id):
     result = db.session.execute(sql, {"id": id})
     comments = result.fetchall()
 
-    sql = text("SELECT id, username FROM users")
-    result = db.session.execute(sql, {"id": id})
+    sql = text("SELECT id, username, admin FROM users")
+    result = db.session.execute(sql)
     users = result.fetchall()
 
     logged_user = session["username"]
@@ -254,20 +294,26 @@ def postcomment(id):
     result = db.session.execute(sql, {"username": username})
     user = result.fetchone()
 
-
     sql = text(
-        "INSERT INTO comments (discussion_id, content, creator_id, creator_name, time) VALUES (:id, :content, :creator_id, :creator_name, NOW())"
+        """INSERT INTO comments (discussion_id, content, creator_id, creator_name, time)
+        VALUES (:id, :content, :creator_id, :creator_name, NOW())"""
     )
-    db.session.execute(sql, {"content": content, "id": id, "creator_id": user[0], "creator_name": user[1]})
+    db.session.execute(
+        sql,
+        {"content": content, "id": id, "creator_id": user[0], "creator_name": user[1]},
+    )
     db.session.commit()
     return redirect(url_for("addcomment", id=id))
+
 
 @app.route("/search", methods=["POST"])
 def search():
     content = request.form["content"]
 
-    sql = text("SELECT * FROM discussions WHERE comment LIKE :content OR title LIKE :content")
-    result = db.session.execute(sql, {"content": "%"+content+"%"})
+    sql = text(
+        "SELECT * FROM discussions WHERE comment LIKE :content OR title LIKE :content"
+    )
+    result = db.session.execute(sql, {"content": "%" + content + "%"})
     discussions = result.fetchall()
 
     sql = text("SELECT * FROM discussions")
@@ -275,8 +321,13 @@ def search():
     all_discussions = result.fetchall()
 
     sql = text("SELECT * FROM comments WHERE content LIKE :content")
-    result = db.session.execute(sql, {"content": "%"+content+"%"})
+    result = db.session.execute(sql, {"content": "%" + content + "%"})
     comments = result.fetchall()
 
-
-    return render_template("search.html", discussions=discussions, comments=comments, all_discussions=all_discussions)
+    return render_template(
+        "search.html",
+        discussions=discussions,
+        comments=comments,
+        all_discussions=all_discussions,
+        content=content,
+    )

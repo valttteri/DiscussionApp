@@ -8,11 +8,15 @@
     <div>
         <hr>
         {% for discussion in discussions %}
-        {% for user in users %}
-            {% if user.id == discussion.creator_id %}
-            <u><b>{{ user.username }}</b>
-            {% endif %}
-        {% endfor %}
+            {% for user in users %}
+                {% if user.id == discussion.creator_id %}
+                    {% if user.admin %}
+                        <u><b>(ADMIN) {{ user.username }}</b>
+                    {% else %}
+                        <u><b>{{ user.username }}</b>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
 
         {{ discussion.time.strftime("%d.%m.%Y %H:%M:%S") }}</u>
         <br><br>
@@ -30,7 +34,7 @@
         ({{ ns.c }})
         {% for user in users %}
             {% if user.id == discussion.creator_id %}
-                {% if user.username == logged_user %}
+                {% if user.username == logged_user or session.admin %}
                 <a href="/updatediscussion/{{ discussion.id }}">Muokkaa</a>
                 <a href="/remove/{{ discussion.id }}">Poista</a>
                 {% endif %}
@@ -40,17 +44,8 @@
         {% endfor %}
     </div>
 
-    <a href="/newdiscussion/{{ topic_id }}">Uusi keskustelu</a><br>
-    {% if session.username %}
-    <div>
-        <p>Olet kirjautunut käyttäjällä {{ session.username }}</p>
-    </div>
-    {% endif %}
+    <a href="/newdiscussion/{{ topic_id }}">Uusi keskustelu</a>
     <form action="/topics">
         <input type="submit" value="Takaisin" name="topics"/>
-    </form>
-    <br>
-    <form action="/logout">
-        <input type="submit" value="Kirjaudu ulos" name="logout"/>
     </form>
 {% endblock %}

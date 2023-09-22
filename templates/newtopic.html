@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content%}
+<div>
+    <h2>Uusi keskustelualue</h2>
+    <form action="/posttopic" method="POST">
+        <input type="text" name="topic" placeholder="Aihe">
+        <br>
+        <input type="submit" value="Luo keskustelualue">
+    </form>
+</div>
+
+<form action="/topics">
+    <input type="submit" value="Takaisin" name="topics"/>
+</form>
+{% endblock%}

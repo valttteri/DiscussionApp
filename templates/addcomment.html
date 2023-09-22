@@ -4,12 +4,15 @@
     <div>
         {% for user in users %}
             {% if user.id == discussion.creator_id %}
-            <h3>Käyttäjä {{ user.username }} kirjoitti
+                {% if user.admin %}
+                    <h3>Käyttäjä (ADMIN) {{ user.username }} kirjoitti {{ discussion.time.strftime("%d.%m.%Y %H:%M:%S") }}</h3>
+                    {{ discussion.comment }}
+                {% else %}
+                    <h3>Käyttäjä {{ user.username }} kirjoitti {{ discussion.time.strftime("%d.%m.%Y %H:%M:%S") }}</h3>
+                    {{ discussion.comment }}
+                {% endif %}
             {% endif %}
         {% endfor %}
-        {{ discussion.time.strftime("%d.%m.%Y %H:%M:%S") }}
-        </h3>
-        {{ discussion.comment }}
         <br>
         <hr>
     </div>
@@ -31,7 +34,7 @@
                 <u>{{ user.username }} <i>{{ comment.time.strftime("%d.%m.%Y %H:%M:%S") }}</i></u>
                 <br> 
                 {{ comment.content }}
-                    {% if user.username == logged_user %}
+                    {% if user.username == logged_user or session.admin %}
                     <br>
                     <a href="/removecomment/{{ comment.id }}">Poista kommentti</a>
                     {% endif %}

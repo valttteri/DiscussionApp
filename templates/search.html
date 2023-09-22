@@ -2,8 +2,12 @@
 
 {% block content %}
     <div>
-        <h2>Hakutulokset:</h2>
-        <br>
+        <h2>Hakusanasi: <i>"{{ content }}"</i></h2>
+        {% if comments|length == 0 and discussions|length == 0 %}
+            Tällä hakusanalla ei löytynyt mitään
+            <br><br>
+        {% endif %}
+
         {% for discussion in discussions %}
             <b>{{ discussion.title }}</b>
             <br>
@@ -21,10 +25,12 @@
                     <i>Käyttäjän {{ comment.creator_name }} kommentti
                     keskustelussa "{{ discussion.title }}" ({{ discussion.topic }})
                     </i>
+                    <hr>
                 {% endif %}
             {% endfor %}
         {% endfor %}
-        <hr>
     </div>
-    <a href="/topics">Takaisin</a>
+    <form action="/topics">
+        <input type="submit" value="Takaisin" name="topics"/>
+    </form>
 {% endblock %}

@@ -13,3 +13,18 @@
     {% endblock %}
 
 </body>
+
+<footer>
+    {% if session.username %}
+        <div>
+        Olet kirjautunut käyttäjällä {{ session.username }}
+        {% if session.admin %}
+            (ylläpitäjä)
+        {% endif %}
+        </div>
+    {% endif %}
+
+    <form action="/logout">
+        <input type="submit" value="Kirjaudu ulos" name="logout"/>
+    </form>
+</footer>
