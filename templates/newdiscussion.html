@@ -1,11 +1,6 @@
-<!DOCTYPE html>
-<head>
-    <title>Messenger</title>
-    <link rel="stylesheet" href="../static/main.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
+{% extends "base.html" %}
 
-<body>
+{% block content%}
     <form action="/postdiscussion/{{ return_id }}" method="POST">
         <h2>Uusi keskustelu</h2>
         Keskustelun aihe: {{ topic }}
@@ -19,4 +14,4 @@
     <form action="/forum/{{ return_id }}">
         <input type="submit" value="Takaisin" name="return"/>
     </form>
-</body>
+{% endblock %}

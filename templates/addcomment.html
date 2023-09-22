@@ -1,11 +1,6 @@
-<!DOCTYPE html>
-<head>
-    <title>Messenger</title>
-    <link rel="stylesheet" href="../static/main.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
+{% extends "base.html"%}
 
-<body>
+{% block content %}
     <div>
         {% for user in users %}
             {% if user.id == discussion.creator_id %}
@@ -45,4 +40,4 @@
         <br><br>
         {% endfor %}
     </div>
-</body>
+{% endblock %}

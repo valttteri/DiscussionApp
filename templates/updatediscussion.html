@@ -1,12 +1,6 @@
-<!DOCTYPE html>
+{% extends "base.html" %}
 
-<head>
-    <title>Messenger</title>
-    <link rel="stylesheet" href="../static/main.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
-
-<body>
+{% block content%}
     <h2>Muokkaa keskustelua</h2>
     <form action="/postdiscussionupdate/{{ discussion_id }}" method="POST">
         <input type="text" name="title" placeholder="Otsikko">
@@ -19,4 +13,4 @@
     <form action="/forum/{{ topic_id }}">
         <input type="submit" value="Takaisin" name="return"/>
     </form>
-</body>
+{% endblock %}

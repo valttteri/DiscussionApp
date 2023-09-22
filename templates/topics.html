@@ -1,12 +1,6 @@
-<!DOCTYPE html>
+{% extends "base.html" %}
 
-<head>
-    <title>Messenger</title>
-    <link rel="stylesheet" href="../static/main.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
-
-<body>
+{% block content%}
     <h2>Keskustelualueet</h2>
     Etsi sivulta
     <form action="/search" method="POST">
@@ -41,4 +35,4 @@
     <form action="/logout">
         <input type="submit" value="Kirjaudu ulos" name="logout"/>
     </form>
-</body>
+{% endblock %}
