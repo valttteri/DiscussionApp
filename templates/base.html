@@ -17,9 +17,9 @@
 
 </body>
 
+{% if session.username %}
 <footer>
     <div class="footerdiv">
-        {% if session.username %}
         <p>Olet kirjautunut käyttäjällä {{ session.username }}
         {% if session.admin %}
             (ylläpitäjä)
@@ -30,5 +30,5 @@
             <input type="submit" value="Kirjaudu ulos" name="logout"/>
         </form>
     </div>
-    {% endif %}
 </footer>
+{% endif %}

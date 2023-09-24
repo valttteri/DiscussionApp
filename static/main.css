@@ -21,7 +21,6 @@ body {
 }
 
 footer {
-    display: block;
     padding: 1em;
     background: #C0C0C0;
     margin-top: .5em;
@@ -55,6 +54,11 @@ footer {
     display: inline-block;
     padding: .5em;
     font-size: large;
+}
+
+.inlineblockdiv {
+    display: inline-block;
+    padding: .3em
 }
 
 .searchbar {
@@ -97,5 +101,5 @@ a {
     border-radius: .5em;
     border: solid;
     border-width: .1em;
-    padding: .3em
+    padding: .15em
 }

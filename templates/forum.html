@@ -5,7 +5,6 @@
     <h3>{{ topic_name }}</h3>
 </div>
 
-    
 {% for discussion in discussions %}
 <div class="topic">
     {% for user in users %}
@@ -45,8 +44,12 @@
 </div>
 {% endfor %}
     
+<div class="inlineblockdiv">
     <a href="/newdiscussion/{{ topic_id }}">Uusi keskustelu</a>
+</div>
+<div class="inlineblockdiv">
     <form action="/topics">
         <input type="submit" value="Takaisin" name="topics"/>
     </form>
+</div>
 {% endblock %}
