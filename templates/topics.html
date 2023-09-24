@@ -3,8 +3,13 @@
 {% block content%}
 
 <div class="inlineblockdiv">
-    <h3>Kanavat<h3>
+    <a href="/topics">Kanavat</a>
 </div>
+
+<div class="inlineblockdiv">
+    <a href="/privatetopics">Omat keskustelut</a>
+</div>
+
 <div class="inlineblockdiv">
     {% if session.admin %}
     <form action="/newtopic">

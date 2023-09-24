@@ -324,3 +324,11 @@ def search():
         all_discussions=all_discussions,
         content=content,
     )
+
+@app.route("/privatetopics", methods=["GET"])
+def privatetopics():
+    sql = text("SELECT * FROM private_discussions")
+    result = db.session.execute(sql)
+    private_discussions = result.fetchall()
+
+    return render_template("privatetopics.html", private_discussions=private_discussions)
