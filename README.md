@@ -21,3 +21,24 @@ lisätä niihin kommentteja. Lähtökohtana on, että valmis sovellus tulee täy
 - Kaverit voivat lähettää toisilleen yksityisviestejä
 - Käyttäjä voi nappia painamalla päästä tarkastelemaan omaa profiiliaan. Profiilissa näkyy tietoja käyttäjästä, esim. keskusteluketjut, joissa käyttäjä on mukana,
   lähetettyjen viestien määrä, saatujen tykkäyksien määrä yms.
+
+#### Välipalautus 2
+Keskustelusovelluksen yllä listatuista ensisijaisista ominaisuuksista on toteutettu jollain tasolla jokainen paitsi salaiset alueet. Sen toteuttaminen on vasta alussa. 
+Tällä hetkellä sovellukseen voi siis luoda käyttäjän, ja osallistua eri aihepiirien keskusteluihin. Toistaiseksi vain ylläpitäjät voivat luoda uusia keskustelukanavia sovellukseen.
+Käyttäjälle voi antaa ylläpitäjän oikeudet komentoriviltä asettamalla kohdan 'admin' arvoksi TRUE.\
+Tässä on sovelluksen käynnistysohjeet:
+
+1. Kloonaa repositorio koneellesi, ja luo sen juureen .env tiedosto. Määritä sen sisältö seuraavanlaiseksi:\
+DATABASE_URL='tietokannan-paikallinen-osoite'\
+SECRET_KEY='salainen-avain'
+
+2. Aktivoi virtuaaliympäristö ja asenna sovelluksen riippuvuudet\
+$ python3 -m venv venv\
+$ source venv/bin/activate\
+$ pip install -r ./requirements.txt
+
+3. Määritä tietokannan skeema\
+$ psql < schema.sql
+
+4. Käynnistä sovellus\
+$ flask run
