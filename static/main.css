@@ -1,11 +1,13 @@
 body {
     margin: 0;
     font-family: "Helvetica Neue", sans-serif;
-    background-color: #EEEEEE;
+    background-color: #ffffff;
 }
 
+/* base */
+
 .header {
-    background: #888888;
+    background: #C0C0C0;
     position: relative;
     padding-top: 0.75em;
     padding-left: 1.5em;
@@ -13,6 +15,21 @@ body {
     border-bottom: solid;
     border-top: solid;
 }
+
+.footerdiv {
+    display: inline-block;
+}
+
+footer {
+    display: block;
+    padding: 1em;
+    background: #C0C0C0;
+    margin-top: .5em;
+    border-top: solid;
+    border-bottom: solid;
+}
+
+/* front page */
 
 .loginform {
     padding: 2em;
@@ -32,6 +49,36 @@ body {
     float: left;
 }
 
+/* topic page */
+
+.topicpagetop {
+    display: inline-block;
+    padding: .5em;
+    font-size: large;
+}
+
+.searchbar {
+    float: right;
+    grid-row-gap: .3em;
+    grid-template-columns: 12em;
+    padding-right: .5em;
+    padding-top: .5em
+}
+
+.topic {
+    background-color: #87CEEB;
+    border: solid;
+    border-radius: .5em;
+    padding-left: .5em;
+    padding-bottom: .5em;
+    margin-top: .5em;
+    margin-left: .5em;
+    margin-right: .5em;
+    margin-bottom: .5em;
+}
+
+/* random */
+
 hr {
     background-color: black;
     margin-top: 10px;
@@ -39,6 +86,16 @@ hr {
     height: 3px;
 }
 
-footer {
-    display: block;
+h3 {
+    padding-left: .5em;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+    background-color: white;
+    border-radius: .5em;
+    border: solid;
+    border-width: .1em;
+    padding: .3em
 }

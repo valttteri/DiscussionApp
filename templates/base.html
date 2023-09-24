@@ -18,15 +18,17 @@
 </body>
 
 <footer>
-    {% if session.username %}
-        <div>
-        Olet kirjautunut käyttäjällä {{ session.username }}
+    <div class="footerdiv">
+        {% if session.username %}
+        <p>Olet kirjautunut käyttäjällä {{ session.username }}
         {% if session.admin %}
             (ylläpitäjä)
-        {% endif %}
-        </div>
+        {% endif %}</p>
+    </div>
+    <div class="footerdiv">
         <form action="/logout">
             <input type="submit" value="Kirjaudu ulos" name="logout"/>
         </form>
+    </div>
     {% endif %}
 </footer>

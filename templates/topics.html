@@ -1,35 +1,38 @@
 {% extends "base.html" %}
 
 {% block content%}
-    <h2>Keskustelualueet</h2>
-    <form action="/search" method="POST">
-        <textarea name="content" rows="2" cols="40" placeholder="Etsi sivulta"></textarea>
-        <input type="submit" value="Etsi">
-        <br>
-    </form>
-    <hr>
-    <div>
-        {% for topic in topics %}
-            {% set ns = namespace(c = 0) %}
-            {% for discussion in discussions %}
-                {% if topic.name == discussion.topic %}
-                    {% set ns.c = ns.c + 1 %}
-                {% endif %}
-            {% endfor %}
-            
-            <a href="/forum/{{ topic.id }}">{{ topic.name }}</a> ({{ ns.c }})
-            <br>
-            {% if topic.lastactivity is not none %}
-                Aktiivinen viimeksi: {{ topic.lastactivity.strftime("%d.%m.%Y %H:%M:%S") }}
-            {% endif %}
-            
-            {% if session.admin %}
-                <a href="/removetopic/{{ topic.id }}">Poista keskustelualue</a>
-            {% endif %}
-        <hr>
-        {% endfor %}
-    </div>
+
+<div class="topicpagetop">
+    <b>Kanavat</b>
+</div>
+<div class="topicpagetop">
     {% if session.admin %}
-        <a href="/newtopic">Uusi keskustelualue</a> 
+        <a href="/newtopic">Lisää uusi</a> 
     {% endif %}
+</div>
+    <form class="searchbar" action="/search" method="POST">
+        <input type="text" name="searchbar" placeholder="Etsi sivulta...">
+        <input type="submit" value="Etsi">
+    </form>
+
+<div>
+    {% for topic in topics %}
+        {% set ns = namespace(c = 0) %}
+        {% for discussion in discussions %}
+            {% if topic.name == discussion.topic %}
+                {% set ns.c = ns.c + 1 %}
+            {% endif %}
+        {% endfor %}
+        <div class="topic">
+            <p><a href="/forum/{{ topic.id }}">{{ topic.name }} ({{ ns.c }})</a></p>
+            {% if topic.lastactivity is not none %}
+            <p>Aktiivinen viimeksi: {{ topic.lastactivity.strftime("%d.%m.%Y %H:%M:%S") }}</p>
+            {% endif %}
+        
+            {% if session.admin %}
+            <a href="/removetopic/{{ topic.id }}">Poista keskustelualue</a>
+            {% endif %}
+        </div>
+    {% endfor %}
+</div>
 {% endblock %}

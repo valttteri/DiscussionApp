@@ -1,49 +1,50 @@
 {% extends "base.html" %}
 
 {% block content%}
-    <div>
-        <h2>{{ topic_name }}</h2>
-    </div>
+<div>
+    <h3>{{ topic_name }}</h3>
+</div>
 
-    <div>
-        <hr>
-        {% for discussion in discussions %}
-            {% for user in users %}
-                {% if user.id == discussion.creator_id %}
-                    {% if user.admin %}
-                        <u><b>(ADMIN) {{ user.username }}</b>
-                    {% else %}
-                        <u><b>{{ user.username }}</b>
-                    {% endif %}
-                {% endif %}
-            {% endfor %}
+    
+{% for discussion in discussions %}
+<div class="topic">
+    {% for user in users %}
+    {% if user.id == discussion.creator_id %}
+        {% if user.admin %}
+            <u><b>(ADMIN) {{ user.username }}</b>
+        {% else %}
+            <u><b>{{ user.username }}</b>
+        {% endif %}
+        {% endif %}
+    {% endfor %}
 
-        {{ discussion.time.strftime("%d.%m.%Y %H:%M:%S") }}</u>
-        <br><br>
-        <b>{{ discussion.title }}</b>
-        <br>
-        {{ discussion.comment }}
-        <br><br>
-        <a href="/addcomment/{{ discussion.id }}">Kommentit</a>
-        {% set ns = namespace(c = 0) %}
-        {% for comment in comments %}
-            {% if discussion.id == comment.discussion_id %}
+    {{ discussion.time.strftime("%d.%m.%Y %H:%M:%S") }}</u>
+    <br><br>
+    <b>{{ discussion.title }}</b>
+    <br>
+    {{ discussion.comment }}
+    <br><br>
+    <a href="/addcomment/{{ discussion.id }}">Kommentit</a>
+
+    {% set ns = namespace(c = 0) %}
+    {% for comment in comments %}
+        {% if discussion.id == comment.discussion_id %}
             {% set ns.c = ns.c + 1 %}
         {% endif %}
-        {% endfor %}
+    {% endfor %}
         ({{ ns.c }})
-        {% for user in users %}
-            {% if user.id == discussion.creator_id %}
-                {% if user.username == logged_user or session.admin %}
-                <a href="/updatediscussion/{{ discussion.id }}">Muokkaa</a>
-                <a href="/remove/{{ discussion.id }}">Poista</a>
-                {% endif %}
-            {% endif %}
-        {% endfor %}
-        <hr>
-        {% endfor %}
-    </div>
 
+    {% for user in users %}
+        {% if user.id == discussion.creator_id %}
+            {% if user.username == logged_user or session.admin %}
+            <a href="/updatediscussion/{{ discussion.id }}">Muokkaa</a>
+            <a href="/remove/{{ discussion.id }}">Poista</a>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+</div>
+{% endfor %}
+    
     <a href="/newdiscussion/{{ topic_id }}">Uusi keskustelu</a>
     <form action="/topics">
         <input type="submit" value="Takaisin" name="topics"/>
