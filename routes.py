@@ -40,9 +40,12 @@ def logout():
     del session["admin"]
     return redirect("/")
 
-
-@app.route("/createuser", methods=["POST"])
+@app.route("/createuser", methods=["GET", "POST"])
 def createuser():
+    return render_template("createaccount.html")
+
+@app.route("/savenewuser", methods=["GET", "POST"])
+def savenewuser():
     username = request.form["username"]
     password = request.form["password"]
     hash_value = generate_password_hash(password)

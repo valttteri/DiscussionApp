@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div>
+        <form action="/savenewuser" method="POST">
+            Luo käyttäjä:<br>
+            <input type="text" name="username" placeholder="Käyttäjätunnus">
+            <br>
+            <input type="password" name="password" placeholder="Salasana">
+            <br>
+            <input type="submit" value="Luo käyttäjä">
+        </form>
+    </div>
+
+{% endblock %}

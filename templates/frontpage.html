@@ -2,26 +2,18 @@
 
 {% block content %}
     
-   <div class="frontpage">
-        <form class="loginform" action="/login" method="POST">
-            <label for="username">Kirjaudu sisään:</label>
-            <input type="text" name="username" placeholder="Käyttäjätunnus">
-            <input type="password" name="password" placeholder="Salasana">
-            <input type="submit" value="Kirjaudu">
-        </form>
-
-        <div>
-            <p>Hei ja tervetuloa! Täällä keskustellaan kaikesta ja kaikista.
-            </p>
-        </div>
-   </div>
-    <!--
-    <form action="/createuser" method="POST">
-        Uusi käyttäjä?:<br>
-        <input type="text" name="username" placeholder="Käyttäjätunnus">
-        <br>
-        <input type="password" name="password" placeholder="Salasana">
-        <br>
-        <input type="submit" value="Luo käyttäjä">
-    </form> -->
+<div class="frontpage">
+     <form class="loginform" action="/login" method="POST">
+         <label for="username">Kirjaudu sisään:</label>
+         <input type="text" name="username" placeholder="Käyttäjätunnus">
+         <input type="password" name="password" placeholder="Salasana">
+         <input type="submit" value="Kirjaudu">
+     </form>
+     <div>
+         <p>Hei ja tervetuloa! Täällä keskustellaan kaikesta ja kaikista.<br>
+            Uusi käyttäjä?
+            <a href="/createuser">Rekisteröidy</a>
+         </p>
+     </div>
+</div>
 {% endblock %}
