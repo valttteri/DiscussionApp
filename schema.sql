@@ -47,5 +47,6 @@ CREATE TABLE private_comments (
     content TEXT,
     discussion_id INTEGER REFERENCES private_discussions ON DELETE CASCADE,
     creator_id INTEGER REFERENCES users ON DELETE CASCADE,
-    time TIMESTAMP
+    time TIMESTAMP,
+    creator_name TEXT
 );

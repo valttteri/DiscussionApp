@@ -386,3 +386,59 @@ def removeprivatetopic(id):
     db.session.commit()
 
     return redirect("/privatetopics")
+
+@app.route("/groupchat/<int:id>", methods=["GET"])
+def groupchat(id):
+    sql = text("SELECT * FROM private_discussions WHERE id=:id")
+    result = db.session.execute(sql, {"id": id})
+    chat = result.fetchone()
+
+    sql = text("SELECT * FROM private_comments WHERE discussion_id=:id")
+    result = db.session.execute(sql, {"id": id})
+    comments = result.fetchall()
+
+    sql = text("""SELECT u.id, u.username, u.admin FROM users u, private_rights r
+               WHERE u.id=r.user_id AND r.discussion_id=:chat_id""")
+    result = db.session.execute(sql, {"chat_id":id})
+    users = result.fetchall()
+
+    return render_template(
+        "groupchat.html",
+        chat=chat,
+        comments=comments,
+        users=users
+    )
+
+@app.route("/addprivatecomment/<int:id>", methods=["POST"])
+def addprivatecomment(id):
+    content = request.form["content"]
+    username = session["username"]
+
+    sql = text("SELECT id, username FROM users where username=:username")
+    result = db.session.execute(sql, {"username": username})
+    user = result.fetchone()
+
+    sql = text(
+        """INSERT INTO private_comments (content, discussion_id, creator_id, creator_name, time)
+        VALUES (:content, :discussion_id, :creator_id, :creator_name, NOW())"""
+    )
+    db.session.execute(
+        sql,
+        {"content": content, "discussion_id": id, "creator_id": user[0], "creator_name": user[1]},
+    )
+    db.session.commit()
+
+    sql = text("UPDATE private_discussions SET lastactivity=NOW() WHERE id=:id")
+    db.session.execute(sql, {"id": id})
+    db.session.commit()
+
+    return redirect(url_for("groupchat", id=id))
+
+@app.route("/removeprivatecomment/<int:id>")
+def removeprivatecomment(id):
+    sql = text("DELETE FROM private_comments WHERE id=:id RETURNING discussion_id")
+    result = db.session.execute(sql, {"id": id})
+    discussion = result.fetchone()[0]
+    db.session.commit()
+
+    return redirect(url_for("groupchat", id=discussion))
