@@ -27,6 +27,10 @@ footer {
     margin-top: .5em;
     border-top: solid;
     border-bottom: solid;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%
 }
 
 /* front page */
@@ -95,7 +99,7 @@ h3 {
     padding-left: .5em;
 }
 
-a {
+.button {
     text-decoration: none;
     color: black;
     background-color: white;
@@ -103,4 +107,30 @@ a {
     border: solid;
     border-width: .1em;
     padding: .15em
+}
+
+/* menu */
+nav {
+    background-color: #C0C0C0;
+    border-top: solid;
+    border-bottom: solid
+}
+
+
+nav li {
+    display: inline-block;
+    margin: .4em
+}
+
+nav li a {
+    text-decoration: none;
+    border: solid;
+    border-radius: .5em;
+    padding: .5em;
+    color: #000;
+    background-color: white;
+}
+
+nav li a:hover {
+    background-color: rgb(226, 226, 226);
 }

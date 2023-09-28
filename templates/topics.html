@@ -3,14 +3,6 @@
 {% block content%}
 
 <div class="inlineblockdiv">
-    <a href="/topics">Kanavat</a>
-</div>
-
-<div class="inlineblockdiv">
-    <a href="/privatetopics">Omat keskustelut</a>
-</div>
-
-<div class="inlineblockdiv">
     {% if session.admin %}
     <form action="/newtopic">
         <input type="submit" name="newtopic" value="Lisää uusi">
@@ -31,13 +23,13 @@
             {% endif %}
         {% endfor %}
         <div class="topic">
-            <p><a href="/forum/{{ topic.id }}">{{ topic.name }} ({{ ns.c }})</a></p>
+            <p><a class="button" href="/forum/{{ topic.id }}">{{ topic.name }} ({{ ns.c }})</a></p>
             {% if topic.lastactivity is not none %}
             <p>Aktiivinen viimeksi: {{ topic.lastactivity.strftime("%d.%m.%Y %H:%M:%S") }}</p>
             {% endif %}
         
             {% if session.admin %}
-            <a href="/removetopic/{{ topic.id }}">Poista kanava</a>
+            <a class="button" href="/removetopic/{{ topic.id }}">Poista kanava</a>
             {% endif %}
         </div>
     {% endfor %}

@@ -6,9 +6,6 @@ from app import app
  
 @app.route("/", methods=["GET", "POST"])
 def index():
-    if len(session) != 0:
-        return redirect("/topics")
-
     return render_template("frontpage.html")
 
 
