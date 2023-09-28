@@ -13,6 +13,9 @@
 {% for discussion in private_discussions %}
     <div class="topic">
         <p>{{ discussion.title }}</p>
+        {% if session.admin %}
+        <p><a href="/removeprivatetopic/{{ discussion.id }}">Poista</a></p>
+        {% endif %}
     </div>
 {% endfor %}
 

@@ -351,6 +351,7 @@ def newprivatetopic():
 @app.route("/postprivatetopic", methods=["GET", "POST"])
 def postprivatetopic():
     title = request.form["title"]
+    members = request.form.getlist("member")
     user_id = session["user_id"]
 
     sql = text(
@@ -366,6 +367,22 @@ def postprivatetopic():
         VALUES (:user_id, :discussion_id)"""
     )
     db.session.execute(sql, {"user_id": user_id, "discussion_id": discussion_id})
+    db.session.commit()
+
+    for member in members:
+        sql = text(
+        """INSERT INTO private_rights (user_id, discussion_id)
+        VALUES (:user_id, :discussion_id)"""
+        )
+        db.session.execute(sql, {"user_id": member, "discussion_id": discussion_id})
+        db.session.commit()
+
+    return redirect("/privatetopics")
+
+@app.route("/removeprivatetopic/<int:id>")
+def removeprivatetopic(id):
+    sql = text("DELETE FROM private_discussions WHERE id=:id")
+    result = db.session.execute(sql, {"id": id})
     db.session.commit()
 
     return redirect("/privatetopics")

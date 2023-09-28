@@ -7,8 +7,10 @@
         <br>
         <input type="text" name="title" placeholder="Otsikko">
         <br>
+        Osallistujat:
+        <br>
         {% for user in users %}
-            <input type="checkbox" name="member">{{ user.username }}
+            <input type="checkbox" name="member" value="{{ user.id }}">{{ user.username }}
             <br>
         {% endfor %}
         <input type="submit" value="Luo keskustelu">

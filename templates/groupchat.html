@@ -1,0 +1,14 @@
+{% extends "base.html"%}
+
+{% block content %}
+
+    <form action="/postcomment/{{ discussion.id }}" method="POST">
+        <textarea name="content" rows="3" cols="40" placeholder="Uusi kommentti"></textarea>
+        <br>
+        <input type="submit" value="Kommentoi">
+        <br>
+    </form>
+    <form action="/forum/{{ return_id }}">
+        <input type="submit" value="Takaisin" name="return"/>
+    </form>
+{% endblock %}
