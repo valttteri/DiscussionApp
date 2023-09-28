@@ -2,6 +2,7 @@ body {
     margin: 0;
     font-family: "Helvetica Neue", sans-serif;
     background-color: #ffffff;
+    padding-bottom: 75px
 }
 
 /* base */
@@ -22,7 +23,7 @@ body {
 }
 
 footer {
-    padding: 1em;
+    padding: .5em;
     background: #C0C0C0;
     margin-top: .5em;
     border-top: solid;
@@ -30,7 +31,8 @@ footer {
     position: fixed;
     left: 0;
     bottom: 0;
-    width: 100%
+    width: 100%;
+    min-height: 50px
 }
 
 /* front page */

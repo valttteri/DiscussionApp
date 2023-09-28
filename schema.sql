@@ -32,11 +32,20 @@ CREATE TABLE topics (
 CREATE TABLE private_discussions (
     id SERIAL PRIMARY KEY,
     title TEXT,
-    creator_id, INTEGER REFERENCES users ON DELETE CASCADE
+    creator_id, INTEGER REFERENCES users ON DELETE CASCADE,
+    lastactivity TIMESTAMP
 );
 
 CREATE TABLE private_rights (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users ON DELETE CASCADE,
     discussion_id, INTEGER REFERENCES private_discussions ON DELETE CASCADE
+);
+
+CREATE TABLE private_comments (
+    id SERIAL PRIMARY KEY,
+    content TEXT,
+    discussion_id INTEGER REFERENCES private_discussions ON DELETE CASCADE,
+    creator_id INTEGER REFERENCES users ON DELETE CASCADE,
+    time TIMESTAMP
 );

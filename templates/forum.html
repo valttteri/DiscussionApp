@@ -35,7 +35,7 @@
 
     {% for user in users %}
         {% if user.id == discussion.creator_id %}
-            {% if user.username == logged_user or session.admin %}
+            {% if user.username == session.username or session.admin %}
             <a href="/updatediscussion/{{ discussion.id }}">Muokkaa</a>
             <a href="/remove/{{ discussion.id }}">Poista</a>
             {% endif %}

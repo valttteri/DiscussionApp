@@ -17,12 +17,14 @@ def login():
     sql = text("SELECT * FROM users WHERE username=:username")
     result = db.session.execute(sql, {"username": username})
     user = result.fetchone()
+    user_id = user[0]
     admin = user[-1]
 
     if user:
         password_hash = user.password
         if check_password_hash(password_hash, password):
             session["username"] = username
+            session["user_id"] = user_id
             session["admin"] = admin
             return redirect("/topics")
         app.logger.info("väärä salasana")
@@ -35,6 +37,7 @@ def login():
 def logout():
     del session["username"]
     del session["admin"]
+    del session["user_id"]
     return redirect("/")
 
 @app.route("/createuser", methods=["GET", "POST"])
@@ -110,14 +113,11 @@ def forum(id):
     result = db.session.execute(sql)
     users = result.fetchall()
 
-    logged_user = session["username"]
-
     return render_template(
         "forum.html",
         discussions=discussions,
         comments=comments,
         users=users,
-        logged_user=logged_user,
         topic_name=topic_name,
         topic_id=topic_id,
     )
@@ -322,10 +322,50 @@ def search():
         content=content,
     )
 
-@app.route("/privatetopics", methods=["GET"])
+@app.route("/privatetopics", methods=["GET", "POST"])
 def privatetopics():
-    sql = text("SELECT * FROM private_discussions")
-    result = db.session.execute(sql)
+    if len(session) == 0:
+        return redirect("/")
+    
+    logged_user_id = session["user_id"]
+
+    sql = text(
+        """SELECT d.id, d.title, d.creator_id FROM private_discussions d, private_rights r
+            WHERE d.id=r.discussion_id AND r.user_id=:logged_user_id"""
+    )
+    result = db.session.execute(sql, {"logged_user_id": logged_user_id})
     private_discussions = result.fetchall()
 
     return render_template("privatetopics.html", private_discussions=private_discussions)
+
+@app.route("/newprivatetopic", methods=["GET", "POST"])
+def newprivatetopic():
+    logged_user = session["user_id"]
+
+    sql = text("SELECT * FROM users WHERE id!=:logged_user")
+    result = db.session.execute(sql, {"logged_user": logged_user})
+    users = result.fetchall()
+
+    return render_template("newprivatetopic.html", users=users)
+
+@app.route("/postprivatetopic", methods=["GET", "POST"])
+def postprivatetopic():
+    title = request.form["title"]
+    user_id = session["user_id"]
+
+    sql = text(
+        """INSERT INTO private_discussions (title, creator_id, lastactivity)
+        VALUES (:title, :creator_id, NOW()) RETURNING id"""
+    )
+    result = db.session.execute(sql, {"title": title, "creator_id": user_id})
+    discussion_id = result.fetchone()[0]
+    db.session.commit()
+    
+    sql = text(
+        """INSERT INTO private_rights (user_id, discussion_id)
+        VALUES (:user_id, :discussion_id)"""
+    )
+    db.session.execute(sql, {"user_id": user_id, "discussion_id": discussion_id})
+    db.session.commit()
+
+    return redirect("/privatetopics")

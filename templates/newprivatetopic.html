@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content%}
+    <form action="/postprivatetopic" method="POST">
+        <h2>Uusi keskustelu</h2>
+        Keskustelun aihe:
+        <br>
+        <input type="text" name="title" placeholder="Otsikko">
+        <br>
+        {% for user in users %}
+            <input type="checkbox" name="member">{{ user.username }}
+            <br>
+        {% endfor %}
+        <input type="submit" value="Luo keskustelu">
+    </form>
+    <form action="/privatetopics">
+        <input type="submit" value="Takaisin" name="return"/>
+    </form>
+{% endblock %}

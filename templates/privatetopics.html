@@ -3,23 +3,15 @@
 {% block content %}
 
 <div class="inlineblockdiv">
-    <a href="/topics">Kanavat</a>
-</div>
-
-<div class="inlineblockdiv">
-    <a href="/privatetopics">Omat keskustelut</a>
-</div>
-
-<div class="inlineblockdiv">
     {% if session.admin %}
-    <form action="/topics">
+    <form action="/newprivatetopic">
         <input type="submit" name="newtopic" value="Lisää uusi">
     </form>
     {% endif %}
 </div>
 
 {% for discussion in private_discussions %}
-    <div>
+    <div class="topic">
         <p>{{ discussion.title }}</p>
     </div>
 {% endfor %}
