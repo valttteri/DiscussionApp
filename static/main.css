@@ -2,7 +2,7 @@ body {
     margin: 0;
     font-family: "Helvetica Neue", sans-serif;
     background-color: #ffffff;
-    padding-bottom: 75px
+    padding-bottom: 75px;
 }
 
 /* base */
@@ -90,34 +90,14 @@ footer {
     margin-right: .5em;
 }
 
-/* random */
-
-hr {
-    background-color: black;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    height: 3px;
-}
-
-h3 {
-    padding-left: .5em;
-}
-
-.button {
-    text-decoration: none;
-    color: black;
-    background-color: white;
-    border-radius: .5em;
-    border: solid;
-    border-width: .1em;
-    padding: .15em
-}
+/*  */
 
 /* menu */
 nav {
     background-color: #C0C0C0;
     border-top: solid;
-    border-bottom: solid
+    border-bottom: solid;
+    width: 100%;
 }
 
 
@@ -138,3 +118,67 @@ nav li a {
 nav li a:hover {
     background-color: rgb(226, 226, 226);
 }
+
+/* random */
+
+hr {
+    background-color: black;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height: 3px;
+}
+
+h2 {
+    padding-left: .5em;
+}
+
+h3 {
+    padding-left: .5em;
+}
+
+p {
+    padding-left: .5em;
+}
+
+.button {
+    text-decoration: none;
+    color: black;
+    background-color: white;
+    border-radius: .5em;
+    border: solid;
+    border-width: .1em;
+    padding: .15em
+}
+
+.form-submit-button {
+    background: white;
+    color: black;
+    border: .1em solid black;
+    border-radius: .5em;
+    text-shadow: none;
+    margin: .5em;
+}
+
+.form-submit-button:hover {
+    background: rgb(226, 226, 226);
+    color: black;
+    border: .1em solid black;
+    border-radius: .5em;
+    text-shadow: none;
+    }
+
+.form-text {
+    padding: 15px;
+    border-radius: 10px;
+    border: .1em solid black;
+    box-shadow: 4px 4px 10px rgba(0,0,0,0.06);
+    margin: .5em
+}
+
+.text-input {
+    margin-left: .5em;
+    margin-top: .5em;
+    border: .1em solid black;
+    border-radius: 10px;
+    padding: .3em
+  }

@@ -3,14 +3,14 @@
 {% block content%}
     <h2>Muokkaa keskustelua</h2>
     <form action="/postdiscussionupdate/{{ discussion_id }}" method="POST">
-        <input type="text" name="title" placeholder="Otsikko">
+        <input class="text-input" type="text" name="title" placeholder="Otsikko">
         <br>
-        <textarea name="comment" rows="3" cols="40" placeholder="Sisältö"></textarea>
+        <textarea class="form-text" name="comment" rows="3" cols="40" placeholder="Sisältö"></textarea>
         <br>
-        <input type="submit" value="Tallenna">
+        <input class="form-submit-button" type="submit" value="Tallenna">
         <br>
     </form>
     <form action="/forum/{{ topic_id }}">
-        <input type="submit" value="Takaisin" name="return"/>
+        <input class="form-submit-button" type="submit" value="Takaisin" name="return"/>
     </form>
 {% endblock %}

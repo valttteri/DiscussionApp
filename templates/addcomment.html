@@ -16,14 +16,15 @@
         <br>
         <hr>
     </div>
+
     <form action="/postcomment/{{ discussion.id }}" method="POST">
-        <textarea name="content" rows="3" cols="40" placeholder="Uusi kommentti"></textarea>
+        <textarea class="form-text" name="content" rows="3" cols="40" placeholder="Uusi kommentti"></textarea>
         <br>
-        <input type="submit" value="Kommentoi">
+        <input class="form-submit-button" type="submit" value="Kommentoi">
         <br>
     </form>
     <form action="/forum/{{ return_id }}">
-        <input type="submit" value="Takaisin" name="return"/>
+        <input class="form-submit-button" type="submit" value="Takaisin" name="return"/>
     </form>
     <div>
         <hr>
