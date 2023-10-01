@@ -12,6 +12,18 @@
         <li><a href="/">Etusivu</a></li>
         <li><a href="/topics">Kanavat</a></li>
         <li><a href="/privatetopics">Omat keskustelut</a></li>
+        {% if session.username %}
+        <li>
+            <p>Kirjautunut käyttäjällä {{ session.username }}
+            {% if session.admin %}
+                (ylläpitäjä)
+            {% endif %}
+            </p>
+        </li>
+        <li>
+            <a href="/logout">Kirjaudu ulos</a>
+        </li>
+        {% endif %}
     </ul>
 </nav>
 
@@ -21,19 +33,3 @@
 {% endblock %}
 
 </body>
-
-<footer>
-    {% if session.username %}
-    <div class="footerdiv">
-        <p>Olet kirjautunut käyttäjällä {{ session.username }}
-        {% if session.admin %}
-            (ylläpitäjä)
-        {% endif %}</p>
-    </div>
-    <div class="footerdiv">
-        <form action="/logout">
-            <input class="form-submit-button" type="submit" value="Kirjaudu ulos" name="logout"/>
-        </form>
-    </div>
-    {% endif %}
-</footer>

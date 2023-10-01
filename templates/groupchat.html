@@ -1,29 +1,29 @@
 {% extends "base.html"%}
 
 {% block content %}
-    <div>
+    <div class="inlineblockdiv">
         <h3>{{ chat.title }}</h3>
-        <b>Jäsenet:</b>
+    </div>
+    <div class="inlineblockdiv">
         {% for user in users %}
             {% if user.username == users[-1].username%}
                 {{ user.username }}
             {% else %}
-                {{ user.username }},
+                {{ user.username }} ja
             {% endif %}
         {% endfor %}
     </div>
-    <br>
+    <div class="inlineblockdiv">
+        <form action="/privatetopics">
+            <input class="form-submit-button" type="submit" value="Takaisin" name="return"/>
+        </form>
+    </div>
+    
     <form action="/addprivatecomment/{{ chat.id }}" method="POST">
         <textarea class="form-text" name="content" rows="3" cols="40" placeholder="Uusi viesti"></textarea>
         <br>
         <input class="form-submit-button" type="submit" value="Lähetä">
-        <br>
     </form>
-    
-    <form action="/privatetopics">
-        <input class="form-submit-button" type="submit" value="Takaisin" name="return"/>
-    </form>
-    <br>
 
     {% for comment in comments %}
     <div class="topic">
