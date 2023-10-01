@@ -17,7 +17,7 @@
         <input type="submit" value="Etsi">
     </form>
 
-<div id="topiclist">
+<div>
     {% for topic in topics %}
         {% set ns = namespace(c = 0) %}
         {% for discussion in discussions %}
@@ -25,14 +25,15 @@
                 {% set ns.c = ns.c + 1 %}
             {% endif %}
         {% endfor %}
-        <div class="topic">
-            <p><a class="button" href="/forum/{{ topic.id }}">{{ topic.name }} ({{ ns.c }})</a></p>
-            {% if topic.lastactivity is not none %}
-            <p>Aktiivinen viimeksi: {{ topic.lastactivity.strftime("%d.%m.%Y %H:%M:%S") }}</p>
-            {% endif %}
-        
+        <div class="removebutton">
             {% if session.admin %}
             <p><a class="button" href="/removetopic/{{ topic.id }}">Poista kanava</a></p>
+            {% endif %}
+        </div>
+        <div class="topic">
+            <p><b><a class="namebutton" href="/forum/{{ topic.id }}">{{ topic.name }} ({{ ns.c }})</a></b></p>
+            {% if topic.lastactivity is not none %}
+            <p>Aktiivinen {{ topic.lastactivity.strftime("%d.%m.%Y %H:%M:%S") }}</p>
             {% endif %}
         </div>
     {% endfor %}

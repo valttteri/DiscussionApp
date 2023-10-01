@@ -5,26 +5,26 @@
     <h3>Omat keskustelut</h3>
 </div>
 <div class="inlineblockdiv">
-    {% if session.admin %}
     <form action="/newprivatetopic">
         <input class="form-submit-button" type="submit" name="newtopic" value="Lisää uusi">
     </form>
-    {% endif %}
 </div>
 
 {% for discussion in private_discussions %}
+    <div class="removebutton">
+        {% if session.admin %}
+        <p><a class="button" href="/removeprivatetopic/{{ discussion.id }}">Poista</a></p>
+        {% endif %}
+    </div>
+
     {% set last_message = (private_comments|selectattr('discussion_id', 'eq', discussion.id)|first) %}
     <div class="topic">
-        <p><a href="/groupchat/{{ discussion.id }}">{{ discussion.title }}</a></p>
+        <p><b><a class="namebutton" href="/groupchat/{{ discussion.id }}">{{ discussion.title }}</a></b></p>
         
         {% if last_message.content|length > 15 %}
-        <p><b>{{ last_message.creator_name}}: </b>{{last_message.content[:15]}}...</p>
+        <p style="color:white"><b>{{ last_message.creator_name}}: </b>{{last_message.content[:15]}}...</p>
         {% else %}
-        <p><b>{{ last_message.creator_name}}: </b>{{last_message.content}}</p>
-        {% endif %}
-
-        {% if session.admin %}
-        <p><a href="/removeprivatetopic/{{ discussion.id }}">Poista</a></p>
+        <p style="color:white"><b>{{ last_message.creator_name}}: </b>{{last_message.content}}</p>
         {% endif %}
     </div>
 {% endfor %}

@@ -401,7 +401,7 @@ def groupchat(id):
     result = db.session.execute(sql, {"id": id})
     chat = result.fetchone()
 
-    sql = text("SELECT * FROM private_comments WHERE discussion_id=:id")
+    sql = text("SELECT * FROM private_comments WHERE discussion_id=:id ORDER BY time DESC")
     result = db.session.execute(sql, {"id": id})
     comments = result.fetchall()
 

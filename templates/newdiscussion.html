@@ -1,17 +1,17 @@
 {% extends "base.html" %}
 
 {% block content%}
-    <form action="/postdiscussion/{{ return_id }}" method="POST">
-        <h2>Uusi keskustelu</h2>
-        Keskustelun aihe: {{ topic }}
-        <br>
-        <input class="text-input" type="text" name="title" placeholder="Otsikko">
-        <br>
-        <textarea class="form-text"name="comment" rows="3" cols="40" placeholder="Kirjoita jotakin:"></textarea>
-        <br>
-        <input class="form-submit-button" type="submit" value="Luo keskustelu">
-    </form>
-    <form action="/forum/{{ return_id }}">
-        <input class="form-submit-button" type="submit" value="Takaisin" name="return"/>
-    </form>
+    <div class="inlineblockdiv">
+        <h2>Uusi keskustelu kanavalle {{ topic }} </h2>
+    </div>
+    <div>
+        <form action="/postdiscussion/{{ return_id }}" method="POST">
+    
+            <input class="text-input" type="text" name="title" placeholder="Otsikko">
+            <br>
+            <textarea class="form-text"name="comment" rows="3" cols="40" placeholder="Kirjoita jotakin:"></textarea>
+            <br>
+            <input class="form-submit-button" type="submit" value="Luo keskustelu">
+        </form>
+    </div>
 {% endblock %}

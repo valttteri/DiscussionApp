@@ -54,6 +54,35 @@ footer {
 
 /* topic page */
 
+.removebutton {
+    position: absolute;
+    right: 20px
+}
+
+.forumbutton {
+    text-decoration: none;
+    color: black;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 2px;
+    background-color: #5abae0;
+}
+
+.forumbutton:hover {
+    color: rgb(88, 88, 88);
+    background-color: #2bade0;
+}
+
+.namebutton {
+    text-decoration: none;
+    color: black;
+}
+
+.namebutton:hover {
+    color: rgb(88, 88, 88);
+    text-shadow:#ffffff 1px 0 10px;
+}
+
 .topicpagetop {
     display: inline-block;
     padding: .5em;
@@ -82,8 +111,18 @@ footer {
     margin-right: .5em;
 }
 
+/* forum */
+
 /* groupchat */
 
+.userlist { 
+    border:2px solid #ccc;
+    width:300px; 
+    height: 100px; 
+    overflow-y: scroll;
+    margin-left: .5em;
+    margin-top: 0
+}
 
 /* base */
 #title {
@@ -126,7 +165,7 @@ nav li a:hover {
 
 .inlineblockdiv {
     display: inline-block;
-    padding: .3em
+    padding: .3em;
 }
 
 hr {
@@ -172,7 +211,7 @@ p {
 .form-submit-button {
     background: white;
     color: black;
-    border: .1em solid black;
+    border: 2px solid black;
     border-radius: .5em;
     text-shadow: none;
     margin: .5em;
@@ -182,7 +221,7 @@ p {
 .form-submit-button:hover {
     background: rgb(226, 226, 226);
     color: black;
-    border: .1em solid black;
+    border: 2px solid black;
     border-radius: .5em;
     text-shadow: none;
     }
@@ -190,7 +229,7 @@ p {
 .form-text {
     padding: 15px;
     border-radius: 10px;
-    border: .1em solid black;
+    border: .1em solid #ccc;
     box-shadow: 4px 4px 10px rgba(0,0,0,0.06);
     margin: .5em
 }
@@ -198,7 +237,7 @@ p {
 .text-input {
     margin-left: .5em;
     margin-top: .5em;
-    border: .1em solid black;
+    border: 2px solid #ccc;
     border-radius: 10px;
     padding: .3em
   }
