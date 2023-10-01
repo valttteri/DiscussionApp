@@ -7,15 +7,12 @@ body {
 
 /* base */
 
-.header {
-    background: #C0C0C0;
+header {
     position: relative;
     padding-top: 0.75em;
     padding-left: 1.5em;
     padding-bottom: 0.75em;
-    border-bottom: solid;
-    border-top: solid;
-    margin-bottom: .5em
+    margin-right: 5em
 }
 
 .footerdiv {
@@ -88,7 +85,17 @@ footer {
 /* groupchat */
 
 
-/* menu */
+/* base */
+#title {
+    margin-right: 1.5em;
+    font-size: 1.3em;
+    color: #1429c5;
+    font-family: 'Signika', sans-serif;
+    padding-bottom: 10px;
+    -webkit-text-stroke-color: black;
+    -webkit-text-stroke-width: .05em;
+}
+
 nav {
     background-color: #C0C0C0;
     border-top: solid;
@@ -141,6 +148,7 @@ h2 {
 
 h3 {
     padding-left: .5em;
+    margin-bottom: 0
 }
 
 p {

@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-
+<div class="inlineblockdiv">
+    <h3>Omat keskustelut</h3>
+</div>
 <div class="inlineblockdiv">
     {% if session.admin %}
     <form action="/newprivatetopic">
@@ -11,8 +13,16 @@
 </div>
 
 {% for discussion in private_discussions %}
+    {% set last_message = (private_comments|selectattr('discussion_id', 'eq', discussion.id)|first) %}
     <div class="topic">
         <p><a href="/groupchat/{{ discussion.id }}">{{ discussion.title }}</a></p>
+        
+        {% if last_message.content|length > 15 %}
+        <p><b>{{ last_message.creator_name}}: </b>{{last_message.content[:15]}}...</p>
+        {% else %}
+        <p><b>{{ last_message.creator_name}}: </b>{{last_message.content}}</p>
+        {% endif %}
+
         {% if session.admin %}
         <p><a href="/removeprivatetopic/{{ discussion.id }}">Poista</a></p>
         {% endif %}

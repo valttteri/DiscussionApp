@@ -336,7 +336,15 @@ def privatetopics():
     result = db.session.execute(sql, {"logged_user_id": logged_user_id})
     private_discussions = result.fetchall()
 
-    return render_template("privatetopics.html", private_discussions=private_discussions)
+    sql = text("SELECT * FROM private_comments ORDER BY time DESC")
+    result = db.session.execute(sql)
+    private_comments = result.fetchall()
+
+    return render_template(
+        "privatetopics.html",
+        private_discussions=private_discussions,
+        private_comments=private_comments
+    )
 
 @app.route("/newprivatetopic", methods=["GET", "POST"])
 def newprivatetopic():
