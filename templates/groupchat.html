@@ -18,13 +18,14 @@
             <input class="form-submit-button" type="submit" value="Takaisin" name="return"/>
         </form>
     </div>
-    
-    <form action="/addprivatecomment/{{ chat.id }}" method="POST">
-        <textarea class="form-text" name="content" rows="3" cols="40" placeholder="Uusi viesti"></textarea>
-        <br>
-        <input class="form-submit-button" type="submit" value="Lähetä">
-    </form>
 
+    <div>
+        <form class="messageform" action="/addprivatecomment/{{ chat.id }}" method="POST">
+            <textarea class="form-text" name="content" rows="3" cols="40" placeholder="Uusi viesti"></textarea>
+            <input class="form-submit-button" type="submit" value="Lähetä">
+        </form>
+    </div>
+    
     {% for comment in comments %}
     <div class="topic">
         {% for user in users %}
@@ -44,4 +45,5 @@
         {% endif %}
     </div>
     {% endfor %}
+
 {% endblock %}

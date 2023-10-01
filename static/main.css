@@ -2,7 +2,6 @@ body {
     margin: 0;
     font-family: "Helvetica Neue", sans-serif;
     background-color: #ffffff;
-    padding-bottom: 75px;
 }
 
 /* base */
@@ -115,6 +114,13 @@ footer {
 
 /* groupchat */
 
+.messageform {
+    margin: auto;
+    display: grid;
+    grid-row-gap: 1px;
+    grid-template-columns: 20em;
+}
+
 .userlist { 
     border:2px solid #ccc;
     width:300px; 
@@ -148,7 +154,7 @@ nav li {
     margin-right: .3em
 }
 
-nav li a {
+nav li a{
     text-decoration: none;
     border: solid;
     border-radius: .5em;
