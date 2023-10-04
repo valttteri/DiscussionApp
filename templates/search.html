@@ -1,36 +1,39 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div>
+    <div class="inlineblockdiv" style="margin-bottom: .5em;">
         <h2>Hakusanasi: <i>"{{ content }}"</i></h2>
         {% if comments|length == 0 and discussions|length == 0 %}
-            Tällä hakusanalla ei löytynyt mitään
+            <p>Tällä hakusanalla ei löytynyt mitään</p>
             <br><br>
         {% endif %}
+    </div>
+    <div class="inlineblockdiv">
+        <form action="/topics">
+            <input class="form-submit-button" type="submit" value="Takaisin" name="topics"/>
+        </form>
+    </div>
 
         {% for discussion in discussions %}
-            <b>{{ discussion.title }}</b>
-            <br>
-            {{ discussion.comment }}
-            <br>
-            <i>Julkaistu keskustelualueella {{ discussion.topic }} {{ discussion.time.strftime("%d.%m.%Y %H:%M:%S") }}</i>
-            <hr>
+            <div class="topic">
+                <p><b>{{ discussion.title }}</b></p>
+                <p>{{ discussion.comment }}</p>
+                <p><i>Julkaistu keskustelualueella {{ discussion.topic }} {{ discussion.time.strftime("%d.%m.%Y %H:%M:%S") }}</i></p>
+            </div>
         {% endfor %}
         
         {% for comment in comments %}
             {% for discussion in all_discussions %}
                 {% if comment.discussion_id == discussion.id %}
-                    {{ comment.content }}
-                    <br>
-                    <i>Käyttäjän {{ comment.creator_name }} kommentti
-                    keskustelussa "{{ discussion.title }}" ({{ discussion.topic }})
-                    </i>
-                    <hr>
+                    <div class="topic">
+                        <p>{{ comment.content }}</p>
+                        <p>
+                        <i>Käyttäjän {{ comment.creator_name }} kommentti
+                            keskustelussa "{{ discussion.title }}" ({{ discussion.topic }})
+                            </i>
+                        </p>
+                    </div>
                 {% endif %}
             {% endfor %}
         {% endfor %}
-    </div>
-    <form action="/topics">
-        <input type="submit" value="Takaisin" name="topics"/>
-    </form>
 {% endblock %}

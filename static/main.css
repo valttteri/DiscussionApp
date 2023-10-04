@@ -110,7 +110,11 @@ footer {
     margin-right: .5em;
 }
 
-/* forum */
+/* comments */
+
+.comment {
+
+}
 
 /* groupchat */
 
@@ -198,6 +202,7 @@ h3 {
 
 p {
     padding-left: .5em;
+    max-width: 50em;
 }
 
 .button {

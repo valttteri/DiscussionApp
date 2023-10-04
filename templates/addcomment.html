@@ -1,21 +1,26 @@
 {% extends "base.html"%}
 
 {% block content %}
-    <div>
-        {% for user in users %}
-            {% if user.id == discussion.creator_id %}
-                {% if user.admin %}
+    {% for user in users %}
+        {% if user.id == discussion.creator_id %}
+            {% if user.admin %}
+                <div style="display: inline-block;">
                     <h3>Käyttäjä (ADMIN) {{ user.username }} kirjoitti {{ discussion.time.strftime("%d.%m.%Y %H:%M:%S") }}</h3>
-                    {{ discussion.comment }}
-                {% else %}
+                </div>
+            {% else %}
+                <div style="display: inline-block;">
                     <h3>Käyttäjä {{ user.username }} kirjoitti {{ discussion.time.strftime("%d.%m.%Y %H:%M:%S") }}</h3>
-                    {{ discussion.comment }}
-                {% endif %}
+                </div>
             {% endif %}
-        {% endfor %}
-        <br>
+            <div style="display: inline-block;">
+                <form action="/forum/{{ return_id }}">
+                    <input class="form-submit-button" type="submit" value="Takaisin" name="return"/>
+                </form>
+            </div>
+            <p>{{ discussion.comment }}</p>
+        {% endif %}
+    {% endfor %}
         <hr>
-    </div>
 
     <form action="/postcomment/{{ discussion.id }}" method="POST">
         <textarea class="form-text" name="content" rows="3" cols="40" placeholder="Uusi kommentti"></textarea>
@@ -23,25 +28,21 @@
         <input class="form-submit-button" type="submit" value="Kommentoi">
         <br>
     </form>
-    <form action="/forum/{{ return_id }}">
-        <input class="form-submit-button" type="submit" value="Takaisin" name="return"/>
-    </form>
     <div>
         <hr>
-        <b>Kommentit:</b><br>
+        <p><b>Kommentit:</b></p>
         {% for comment in comments %}
-            {% for user in users %}
-                {% if user.id == comment.creator_id %}
-                <u>{{ user.username }} <i>{{ comment.time.strftime("%d.%m.%Y %H:%M:%S") }}</i></u>
-                <br> 
-                {{ comment.content }}
-                    {% if user.username == logged_user or session.admin %}
-                    <br>
-                    <a href="/removecomment/{{ comment.id }}">Poista kommentti</a>
+            <div class="topic">
+                {% for user in users %}
+                    {% if user.id == comment.creator_id %}
+                    <p><b><u>{{ user.username }} <i>{{ comment.time.strftime("%d.%m.%Y %H:%M:%S") }}</i></u></b></p>
+                    <p>{{ comment.content }}</p>
+                        {% if user.username == logged_user or session.admin %}
+                            <p><a class="forumbutton" href="/removecomment/{{ comment.id }}">Poista kommentti</a></p>
+                        {% endif %}
                     {% endif %}
-                {% endif %}
-            {% endfor %}
-        <br><br>
+                {% endfor %}
+            </div>
         {% endfor %}
     </div>
 {% endblock %}
