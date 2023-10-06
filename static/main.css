@@ -112,10 +112,6 @@ footer {
 
 /* comments */
 
-.comment {
-
-}
-
 /* groupchat */
 
 .messageform {
@@ -172,6 +168,25 @@ nav li a:hover {
 }
 
 /* random */
+
+.flashmessage{
+    background-color: #ccc;
+    border: 1px solid rgb(133, 133, 133);
+    border-radius: 10px;
+    margin: .5em;
+    padding: .3em;
+    max-width: fit-content;
+}
+
+.flashbutton {
+    text-decoration: none;
+    color: black;
+    background-color: #ccc;
+    border-radius: 10px;
+    border: solid;
+    border-width: .1em;
+    padding: .1em .3em
+}
 
 .inlineblockdiv {
     display: inline-block;

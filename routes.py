@@ -1,13 +1,19 @@
-from flask import redirect, render_template, request, session, url_for
+from flask import redirect, render_template, request, session, url_for, flash
 from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy.sql import text
 from db import db
 from app import app
+import tools
  
 @app.route("/", methods=["GET", "POST"])
 def index():
     return render_template("frontpage.html")
 
+@app.route("/closeflash", methods=["GET"])
+def closeflash():
+    session.pop('flashes', None)
+    print(request.url)
+    return redirect("/")
 
 # log in to the application
 @app.route("/login", methods=["POST"])
@@ -47,7 +53,17 @@ def createuser():
 @app.route("/savenewuser", methods=["GET", "POST"])
 def savenewuser():
     username = request.form["username"]
+
+    if tools.username_taken(username):
+        flash("username taken boi")
+        return redirect("/createuser")
+
     password = request.form["password"]
+
+    if tools.bad_password(password):
+        flash("Your password must be at least 5 characters long")
+        return redirect("/createuser")
+
     hash_value = generate_password_hash(password)
     sql = text(
         "INSERT INTO users (username, password, admin) VALUES (:username, :password, 'FALSE')"
