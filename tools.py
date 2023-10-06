@@ -1,4 +1,5 @@
 from sqlalchemy.sql import text
+from flask import flash
 from db import db
 
 def username_taken(username: str):
@@ -17,3 +18,20 @@ def bad_password(password: str):
     if len(password) < 5:
         return True
     return False
+
+def valid_discussion(title:str, comment:str):
+    """Check if user is trying to post a valid discussion"""
+    if len(title) == 0:
+        flash("Valitse otsikko")
+        return False
+    if len(comment) == 0:
+        flash("Kirjoita keskustelulle avaus")
+        return False
+    if len(title) > 50:
+        flash("Otsikko ei saa olla 50 merkkiä pidempi")
+        return False
+    if len(comment) > 300:
+        flash("Avaus ei voi olla 300 merkkiä pidempi")
+        return False
+    
+    return True

@@ -16,6 +16,10 @@ def closeflash(id):
         return redirect("/createuser")
     if id == 2:
         return redirect("/")
+    if id == 3:
+        return redirect("/topics")
+    if id == 4:
+        return redirect("/privatetopics")
 
 # log in to the application
 @app.route("/login", methods=["POST"])
@@ -25,24 +29,28 @@ def login():
     sql = text("SELECT * FROM users WHERE username=:username")
     result = db.session.execute(sql, {"username": username})
     user = result.fetchone()
-    user_id = user[0]
-    admin = user[-1]
 
-    if user:
-        password_hash = user.password
-        if check_password_hash(password_hash, password):
-            session["username"] = username
-            session["user_id"] = user_id
-            session["admin"] = admin
-            return redirect("/topics")
-        app.logger.info("väärä salasana")
+    if not user:
+        flash("Virheellinen käyttäjänimi")
         return redirect("/")
     
-    app.logger.info("käyttäjää ei löydy")
+    user_id = user[0]
+    admin = user[-1]
+    password_hash = user.password
+
+    if check_password_hash(password_hash, password):
+        session["username"] = username
+        session["user_id"] = user_id
+        session["admin"] = admin
+        flash(f"Kirjauduttu sisään käyttäjällä {username}")
+        return redirect("/")
+    flash("Virheellinen salasana")
     return redirect("/")
 
 @app.route("/logout")
 def logout():
+    username = session["username"]
+    flash(f"Kirjattiin ulos käyttäjä {username}")
     del session["username"]
     del session["admin"]
     del session["user_id"]
@@ -57,20 +65,20 @@ def savenewuser():
     username = request.form["username"]
 
     if tools.username_taken(username):
-        flash("Username already taken")
+        flash("Tämä käyttäjänimi on jo käytössä")
         return redirect("/createuser")
 
     password = request.form["password"]
 
     if tools.bad_password(password):
-        flash("Your password must be at least 5 characters long")
+        flash("Salasanan on oltava vähintään 5 merkkiä pitkä")
         return redirect("/createuser")
 
     hash_value = generate_password_hash(password)
     sql = text(
         "INSERT INTO users (username, password, admin) VALUES (:username, :password, 'FALSE')"
     )
-    flash("Created a new account")
+    flash("Luotiin uusi käyttäjä")
     db.session.execute(sql, {"username": username, "password": hash_value})
     db.session.commit()
     return redirect("/")
@@ -145,6 +153,9 @@ def forum(id):
 # add a new discussion
 @app.route("/newdiscussion/<int:id>", methods=["GET", "POST"])
 def new(id):
+    if len(session) == 0:
+        return redirect("/")
+     
     sql = text("SELECT id FROM topics WHERE id=:id")
     result = db.session.execute(sql, {"id": id})
     return_id = result.fetchone()[0]
@@ -167,6 +178,11 @@ def postdiscussion(id):
     comment = request.form["comment"]
     username = session["username"]
 
+    if not username:
+        return redirect("/")
+    if not tools.valid_discussion(title, comment):
+        return redirect("/topics")
+
     sql = text("SELECT id FROM users where username=:username")
     result = db.session.execute(sql, {"username": username})
     user = result.fetchone()[0]
@@ -188,6 +204,8 @@ def postdiscussion(id):
 @app.route("/updatediscussion/<int:id>", methods=["GET", "POST"])
 def updatediscussion(id):
     """Update a discussion"""
+    if len(session) == 0:
+        return redirect("/")
 
     sql = text("SELECT topic FROM discussions where id=:id")
     result = db.session.execute(sql, {"id": id})
@@ -203,6 +221,8 @@ def updatediscussion(id):
 @app.route("/postdiscussionupdate/<int:id>", methods=["GET", "POST"])
 def postdiscussionupdate(id):
     """Save an updated discussion to database"""
+    if len(session) == 0:
+        return redirect("/")
 
     sql = text("SELECT topic FROM discussions WHERE id=:id")
     result = db.session.execute(sql, {"id": id})
@@ -232,6 +252,8 @@ def postdiscussionupdate(id):
 @app.route("/remove/<int:id>")
 def remove(id):
     """Remove a discussion"""
+    if len(session) == 0:
+        return redirect("/")
 
     sql = text("DELETE FROM discussions WHERE id=:id RETURNING topic")
     result = db.session.execute(sql, {"id": id})
@@ -296,8 +318,17 @@ def addcomment(id):
 
 @app.route("/postcomment/<int:id>", methods=["POST"])
 def postcomment(id):
+    if len(session) == 0:
+        return redirect("/")
+
     content = request.form["content"]
     username = session["username"]
+
+    if len(content) == 0:
+        return redirect(url_for("addcomment", id=id))
+    if len(content) > 300:
+        flash("Comment can't be longer than 300 characters")
+        return redirect("/topics")
 
     sql = text("SELECT id, username FROM users where username=:username")
     result = db.session.execute(sql, {"username": username})
@@ -367,6 +398,9 @@ def privatetopics():
 
 @app.route("/newprivatetopic", methods=["GET", "POST"])
 def newprivatetopic():
+    if len(session) == 0:
+        return redirect("/")
+
     logged_user = session["user_id"]
 
     sql = text("SELECT * FROM users WHERE id!=:logged_user")
@@ -377,10 +411,23 @@ def newprivatetopic():
 
 @app.route("/postprivatetopic", methods=["GET", "POST"])
 def postprivatetopic():
+    if len(session) == 0:
+        return redirect("/")
+
     title = request.form["title"]
     members = request.form.getlist("member")
     user_id = session["user_id"]
 
+    if not members:
+        flash("Valitse keskusteluun ainakin yksi jäsen")
+        return redirect("/privatetopics")
+    if len(title) == 0:
+        flash("Valitse keskustelulle nimi")
+        return redirect("/privatetopics")
+    if len(title) > 50:
+        flash("Keskustelun nimi voi olla enintään 50 merkkiä pitkä")
+        return redirect("/privatetopics")
+ 
     sql = text(
         """INSERT INTO private_discussions (title, creator_id, lastactivity)
         VALUES (:title, :creator_id, NOW()) RETURNING id"""

@@ -1,6 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+{% for message in get_flashed_messages() %}
+<div class="flashmessage">
+    <b>{{ message }}</b>
+    <a class="flashbutton" href="/closeflash/{{ 4 }}"><b>x</b></a>
+</div>
+{% endfor %}
+
 <div class="inlineblockdiv">
     <h3>Omat keskustelut</h3>
 </div>

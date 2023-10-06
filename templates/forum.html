@@ -1,58 +1,66 @@
 {% extends "base.html" %}
 
 {% block content%}
-<div style="margin-bottom: .5em;">
-    <div class="inlineblockdiv">
-        <h3>{{ topic_name }}</h3>
-    </div>
-    <div class="inlineblockdiv">
-        <a class="button" href="/newdiscussion/{{ topic_id }}">Uusi keskustelu</a>
-    </div>
-    <div class="inlineblockdiv">
-        <a class="button" href="/topics">Takaisin</a>
-    </div>
-</div>
 
-{% for discussion in discussions %}
-<div class="topic">
-    {% for user in users %}
-    {% if user.id == discussion.creator_id %}
-        {% if user.admin %}
-            <p><u><b>(ADMIN) {{ user.username }}</b>
-        {% else %}
-            <p><u><b>{{ user.username }}</b>
-        {% endif %}
-        {% endif %}
+    {% for message in get_flashed_messages() %}
+    <div class="flashmessage">
+        <b>{{ message }}</b>
+        <a class="flashbutton" href="/closeflash/{{ 3 }}"><b>x</b></a>
+    </div>
     {% endfor %}
-
-    {{ discussion.time.strftime("%d.%m.%Y %H:%M:%S") }}</u></p>
-    <p style="margin:0;"><b>{{ discussion.title }}</b>
-    <br>
-    {{ discussion.comment }}</p>  
     
-    <div class="inlineblockdiv">
-        {% set ns = namespace(c = 0) %}
-        {% for comment in comments %}
-            {% if discussion.id == comment.discussion_id %}
-                {% set ns.c = ns.c + 1 %}
+    <div style="margin-bottom: .5em;">
+        <div class="inlineblockdiv">
+            <h3>{{ topic_name }}</h3>
+        </div>
+        <div class="inlineblockdiv">
+            <a class="button" href="/newdiscussion/{{ topic_id }}">Uusi keskustelu</a>
+        </div>
+        <div class="inlineblockdiv">
+            <a class="button" href="/topics">Takaisin</a>
+        </div>
+    </div>
+    
+    {% for discussion in discussions %}
+    <div class="topic">
+        {% for user in users %}
+        {% if user.id == discussion.creator_id %}
+            {% if user.admin %}
+                <p><u><b>(ADMIN) {{ user.username }}</b>
+            {% else %}
+                <p><u><b>{{ user.username }}</b>
+            {% endif %}
             {% endif %}
         {% endfor %}
-        <p><a class="forumbutton" href="/addcomment/{{ discussion.id }}">Kommentit ({{ ns.c }})</a></p>
-    </div>
-
-    {% for user in users %}
-        {% if user.id == discussion.creator_id %}
-            {% if user.username == session.username or session.admin %}
-            <div class="inlineblockdiv">
-                <a class="forumbutton" href="/updatediscussion/{{ discussion.id }}">Muokkaa</a>
-            </div>
-            <div class="inlineblockdiv">
-                <a class="forumbutton" href="/remove/{{ discussion.id }}">Poista</a>
-            </div>
+                
+        {{ discussion.time.strftime("%d.%m.%Y %H:%M:%S") }}</u></p>
+        <p style="margin:0;"><b>{{ discussion.title }}</b>
+        <br>
+        {{ discussion.comment }}</p>  
+        
+        <div class="inlineblockdiv">
+            {% set ns = namespace(c = 0) %}
+            {% for comment in comments %}
+                {% if discussion.id == comment.discussion_id %}
+                    {% set ns.c = ns.c + 1 %}
+                {% endif %}
+            {% endfor %}
+            <p><a class="forumbutton" href="/addcomment/{{ discussion.id }}">Kommentit ({{ ns.c }})</a></p>
+        </div>
+    
+        {% for user in users %}
+            {% if user.id == discussion.creator_id %}
+                {% if user.username == session.username or session.admin %}
+                <div class="inlineblockdiv">
+                    <a class="forumbutton" href="/updatediscussion/{{ discussion.id }}">Muokkaa</a>
+                </div>
+                <div class="inlineblockdiv">
+                    <a class="forumbutton" href="/remove/{{ discussion.id }}">Poista</a>
+                </div>
+                {% endif %}
             {% endif %}
-        {% endif %}
+        {% endfor %}
+    </div>
     {% endfor %}
-</div>
-{% endfor %}
 
 {% endblock %}

@@ -1,8 +1,14 @@
 {% extends "base.html" %}
 
 {% block content%}
+
     <div class="inlineblockdiv">
         <h2>Uusi keskustelu kanavalle {{ topic }} </h2>
+    </div>
+    <div class="inlineblockdiv">
+        <form action="/forum/{{ return_id }}">
+            <input class="form-submit-button" type="submit" value="Takaisin" name="topics"/>
+        </form>
     </div>
     <div>
         <form action="/postdiscussion/{{ return_id }}" method="POST">

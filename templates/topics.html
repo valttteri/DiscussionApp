@@ -1,41 +1,49 @@
 {% extends "base.html" %}
 
 {% block content%}
-<div class="inlineblockdiv">
-    <h3>Kanavat</h3>
-</div>
 
-<div class="inlineblockdiv">
-    {% if session.admin %}
-    <form action="/newtopic">
-        <input class="form-submit-button" type="submit" name="newtopic" value="Lisää uusi">
-    </form>
-    {% endif %}
-</div>
-    <form class="searchbar" action="/search" method="POST">
-        <input name="content" placeholder="Etsi sivulta...">
-        <input type="submit" value="Etsi">
-    </form>
-
-<div>
-    {% for topic in topics %}
-        {% set ns = namespace(c = 0) %}
-        {% for discussion in discussions %}
-            {% if topic.name == discussion.topic %}
-                {% set ns.c = ns.c + 1 %}
-            {% endif %}
-        {% endfor %}
-        <div class="removebutton">
-            {% if session.admin %}
-            <p><a class="button" href="/removetopic/{{ topic.id }}">Poista kanava</a></p>
-            {% endif %}
-        </div>
-        <div class="topic">
-            <p><b><a class="namebutton" href="/forum/{{ topic.id }}">{{ topic.name }} ({{ ns.c }})</a></b></p>
-            {% if topic.lastactivity is not none %}
-            <p>Aktiivinen {{ topic.lastactivity.strftime("%d.%m.%Y %H:%M:%S") }}</p>
-            {% endif %}
+    {% for message in get_flashed_messages() %}
+        <div class="flashmessage">
+            <b>{{ message }}</b>
+            <a class="flashbutton" href="/closeflash/{{ 3 }}"><b>x</b></a>
         </div>
     {% endfor %}
-</div>
+
+    <div class="inlineblockdiv">
+        <h3>Kanavat</h3>
+    </div>
+
+    <div class="inlineblockdiv">
+        {% if session.admin %}
+        <form action="/newtopic">
+            <input class="form-submit-button" type="submit" name="newtopic" value="Lisää uusi">
+        </form>
+        {% endif %}
+    </div>
+        <form class="searchbar" action="/search" method="POST">
+            <input name="content" placeholder="Etsi sivulta...">
+            <input type="submit" value="Etsi">
+        </form>
+
+    <div>
+        {% for topic in topics %}
+            {% set ns = namespace(c = 0) %}
+            {% for discussion in discussions %}
+                {% if topic.name == discussion.topic %}
+                    {% set ns.c = ns.c + 1 %}
+                {% endif %}
+            {% endfor %}
+            <div class="removebutton">
+                {% if session.admin %}
+                <p><a class="button" href="/removetopic/{{ topic.id }}">Poista kanava</a></p>
+                {% endif %}
+            </div>
+            <div class="topic">
+                <p><b><a class="namebutton" href="/forum/{{ topic.id }}">{{ topic.name }} ({{ ns.c }})</a></b></p>
+                {% if topic.lastactivity is not none %}
+                <p>Aktiivinen {{ topic.lastactivity.strftime("%d.%m.%Y %H:%M:%S") }}</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}
