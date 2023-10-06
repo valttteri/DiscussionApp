@@ -21,6 +21,10 @@ def closeflash(id):
     if id == 4:
         return redirect("/privatetopics")
 
+@app.route("/loggingin", methods=["GET", "POST"])
+def loggingin():
+    return render_template("login.html")
+
 # log in to the application
 @app.route("/login", methods=["POST"])
 def login():

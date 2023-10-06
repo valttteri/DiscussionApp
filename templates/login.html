@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div>
+        <form action="/login" method="POST">
+            <p>Kirjaudu sisään:</p>
+            <input class="text-input" type="text" name="username" placeholder="Käyttäjätunnus">
+            <br>
+            <input class="text-input" type="password" name="password" placeholder="Salasana">
+            <br>
+            <input class="form-submit-button" type="submit" value="Kirjaudu">
+        </form>
+    </div>
+
+{% endblock%}
