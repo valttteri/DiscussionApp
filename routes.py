@@ -312,6 +312,9 @@ def removetopic(id):
 
 @app.route("/addcomment/<int:id>", methods=["GET", "POST"])
 def addcomment(id):
+    if len(session) == 0:
+        return redirect("/")
+
     sql = text("SELECT * FROM discussions WHERE id=:id")
     result = db.session.execute(sql, {"id": id})
     discussion = result.fetchone()
