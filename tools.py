@@ -33,5 +33,11 @@ def valid_discussion(title:str, comment:str):
     if len(comment) > 300:
         flash("Avaus ei voi olla 300 merkkiä pidempi")
         return False
-    
+
     return True
+
+def get_discussions():
+    sql = text("SELECT * FROM discussions")
+    result = db.session.execute(sql)
+    discussions = result.fetchall()
+    return discussions

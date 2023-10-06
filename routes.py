@@ -7,6 +7,22 @@ import tools
  
 @app.route("/", methods=["GET", "POST"])
 def index():
+    discussions = tools.get_discussions()
+
+    sql = text("SELECT * FROM users")
+    result = db.session.execute(sql)
+    users = result.fetchall()
+
+    sql = text("SELECT * FROM topics")
+    result = db.session.execute(sql)
+    topics = result.fetchall()
+
+    sql = text("SELECT * FROM comments")
+    result = db.session.execute(sql)
+    comments = result.fetchall()
+
+    if discussions:
+        return render_template("frontpage.html", discussions=discussions, users=users, topics=topics, comments=comments)
     return render_template("frontpage.html")
 
 @app.route("/closeflash/<int:id>", methods=["GET"])
