@@ -9,11 +9,13 @@ import tools
 def index():
     return render_template("frontpage.html")
 
-@app.route("/closeflash", methods=["GET"])
-def closeflash():
+@app.route("/closeflash/<int:id>", methods=["GET"])
+def closeflash(id):
     session.pop('flashes', None)
-    print(request.url)
-    return redirect("/")
+    if id == 1:
+        return redirect("/createuser")
+    if id == 2:
+        return redirect("/")
 
 # log in to the application
 @app.route("/login", methods=["POST"])
@@ -55,7 +57,7 @@ def savenewuser():
     username = request.form["username"]
 
     if tools.username_taken(username):
-        flash("username taken boi")
+        flash("Username already taken")
         return redirect("/createuser")
 
     password = request.form["password"]
@@ -68,6 +70,7 @@ def savenewuser():
     sql = text(
         "INSERT INTO users (username, password, admin) VALUES (:username, :password, 'FALSE')"
     )
+    flash("Created a new account")
     db.session.execute(sql, {"username": username, "password": hash_value})
     db.session.commit()
     return redirect("/")

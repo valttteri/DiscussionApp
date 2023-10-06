@@ -2,6 +2,14 @@
 
 {% block content %}
 
+    
+    {% for message in get_flashed_messages() %}
+    <div class="flashmessage">
+        <b>{{ message }}</b>
+        <a class="flashbutton" href="/closeflash/{{ 1 }}"><b>x</b></a>
+    </div>
+    {% endfor %}
+
     <div>
         <form action="/savenewuser" method="POST">
             <p>Luo käyttäjä:</p>

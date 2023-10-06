@@ -30,15 +30,6 @@
 
 <body>
 
-<div>
-    {% for message in get_flashed_messages() %}
-    <div class="flashmessage">
-        <b>{{ message }}</b>
-        <a class="flashbutton" href="/closeflash"><b>x</b></a>
-    </div>
-    {% endfor %}
-</div>
-
 {% block content %}
 {% endblock %}
 
