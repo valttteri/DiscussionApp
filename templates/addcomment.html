@@ -35,8 +35,12 @@
             <div class="topic">
                 {% for user in users %}
                     {% if user.id == comment.creator_id %}
-                    <p><b><u>{{ user.username }} <i>{{ comment.time.strftime("%d.%m.%Y %H:%M:%S") }}</i></u></b></p>
-                    <p>{{ comment.content }}</p>
+                        {% if user.admin %}
+                        <p><b><u> (ADMIN) {{ user.username }} <i>{{ comment.time.strftime("%d.%m.%Y %H:%M:%S") }}</i></u></b></p>
+                        {% else %}
+                        <p><b><u>{{ user.username }} <i>{{ comment.time.strftime("%d.%m.%Y %H:%M:%S") }}</i></u></b></p>
+                        {% endif %}
+                        <p>{{ comment.content }}</p>
                         {% if user.username == logged_user or session.admin %}
                             <p><a class="forumbutton" href="/removecomment/{{ comment.id }}">Poista kommentti</a></p>
                         {% endif %}

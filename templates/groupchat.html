@@ -6,10 +6,10 @@
     </div>
     <div class="inlineblockdiv">
         {% for user in users %}
-            {% if user.username == users[-1].username%}
-                {{ user.username }}
+            {% if loop.last %}
+                ja {{ user.username }}
             {% else %}
-                {{ user.username }} ja
+                {{ user.username }},
             {% endif %}
         {% endfor %}
     </div>

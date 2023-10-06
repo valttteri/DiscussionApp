@@ -21,10 +21,12 @@
     <div class="topic">
         <p><b><a class="namebutton" href="/groupchat/{{ discussion.id }}">{{ discussion.title }}</a></b></p>
         
-        {% if last_message.content|length > 15 %}
-        <p style="color:white"><b>{{ last_message.creator_name}}: </b>{{last_message.content[:15]}}...</p>
-        {% else %}
-        <p style="color:white"><b>{{ last_message.creator_name}}: </b>{{last_message.content}}</p>
+        {% if last_message is defined %}
+            {% if last_message.content|length > 15 %}
+            <p style="color:white"><b>{{ last_message.creator_name}}: </b>{{last_message.content[:15]}}...</p>
+            {% else %}
+            <p style="color:white"><b>{{ last_message.creator_name}}: </b>{{last_message.content}}</p>
+            {% endif %}
         {% endif %}
     </div>
 {% endfor %}
