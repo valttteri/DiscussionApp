@@ -27,6 +27,11 @@
     </div>
     
     {% for comment in comments %}
+    <div class="removebutton">
+        {% if session.admin %}
+        <p><a class="button" href="/removeprivatecomment/{{ comment.id }}">Poista kommentti</a></p>
+        {% endif %}
+    </div>
     <div class="topic">
         {% for user in users %}
             {% if user.id == comment.creator_id %}
@@ -40,9 +45,6 @@
 
         {{ comment.time.strftime("%d.%m.%Y %H:%M:%S") }}</u></p>
         <p>{{ comment.content }}</p>
-        {% if session.admin %}
-            <p><a href="/removeprivatecomment/{{ comment.id }}">Poista kommentti</a></p>
-        {% endif %}
     </div>
     {% endfor %}
 

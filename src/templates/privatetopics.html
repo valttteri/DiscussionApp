@@ -12,17 +12,20 @@
 <div class="inlineblockdiv">
     <h3>Omat keskustelut</h3>
 </div>
+
 <div class="inlineblockdiv">
     <form action="/newprivatetopic">
         <input class="form-submit-button" type="submit" name="newtopic" value="Lisää uusi">
     </form>
 </div>
 
+{% if private_discussions|length == 0%}
+    <p style="margin-left: .5em;">Sinulla ei ole vielä ryhmäkeskusteluja</p>
+{% endif %}
+
 {% for discussion in private_discussions %}
     <div class="removebutton">
-        {% if session.admin %}
         <p><a class="button" href="/removeprivatetopic/{{ discussion.id }}">Poista</a></p>
-        {% endif %}
     </div>
 
     {% set last_message = (private_comments|selectattr('discussion_id', 'eq', discussion.id)|first) %}

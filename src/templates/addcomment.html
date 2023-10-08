@@ -5,11 +5,11 @@
         {% if user.id == discussion.creator_id %}
             {% if user.admin %}
                 <div style="display: inline-block;">
-                    <h3>Käyttäjä (ADMIN) {{ user.username }} kirjoitti {{ discussion.time.strftime("%d.%m.%Y %H:%M:%S") }}</h3>
+                    <h3>Käyttäjä (ADMIN) {{ user.username }} kirjoitti {{ discussion.time.strftime("%d.%m.%Y %H:%M:%S") }} @{{ discussion.topic }}</h3>
                 </div>
             {% else %}
                 <div style="display: inline-block;">
-                    <h3>Käyttäjä {{ user.username }} kirjoitti {{ discussion.time.strftime("%d.%m.%Y %H:%M:%S") }}</h3>
+                    <h3>Käyttäjä {{ user.username }} kirjoitti {{ discussion.time.strftime("%d.%m.%Y %H:%M:%S") }} @{{ discussion.topic }}</h3>
                 </div>
             {% endif %}
             <div style="display: inline-block;">

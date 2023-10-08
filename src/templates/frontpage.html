@@ -9,6 +9,15 @@
 </div>
 {% endfor %}
 
+{% if not session.username %}
+<div>
+    <p><b>
+        Tervetuloa! Täällä keskustellaan kaikesta ja kaikista.
+        Kirjaudu sisään tai luo uusi käyttäjä.
+    </b></p>
+</div>
+{% endif %}
+
 {% for discussion in discussions %}
     <div class="topic">
         {% for user in users %}

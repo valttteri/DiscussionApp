@@ -132,12 +132,8 @@ def posttopic():
 
     return redirect("/topics")
 
-# render the discussions
 @app.route("/forum/<int:id>", methods=["GET", "POST"])
 def forum(id):
-    if len(session) == 0:
-        return redirect("/")
-
     sql = text("SELECT name, id FROM topics WHERE id=:id")
     result = db.session.execute(sql, {"id": id})
     topic = result.fetchone()
@@ -166,7 +162,8 @@ def forum(id):
 @app.route("/newdiscussion/<int:id>", methods=["GET", "POST"])
 def new(id):
     if len(session) == 0:
-        return redirect("/")
+        flash("Kirjaudu sisään lisätäksesi uuden keskustelun")
+        return redirect("/topics")
      
     sql = text("SELECT id FROM topics WHERE id=:id")
     result = db.session.execute(sql, {"id": id})
@@ -180,6 +177,8 @@ def new(id):
 
 @app.route("/postdiscussion/<int:id>", methods=["POST"])
 def postdiscussion(id):
+    if len(session) == 0:
+        return redirect("/")
     """Save a new discussion to database"""
 
     sql = text("SELECT name FROM topics WHERE id=:id")
@@ -219,15 +218,21 @@ def updatediscussion(id):
     if len(session) == 0:
         return redirect("/")
 
-    sql = text("SELECT topic FROM discussions where id=:id")
+    sql = text("SELECT * FROM discussions where id=:id")
     result = db.session.execute(sql, {"id": id})
-    discussion_topic = result.fetchone()[0]
+    discussion = result.fetchone()
+    discussion_topic = discussion[1]
 
     sql = text("SELECT id FROM topics WHERE name=:name")
     result = db.session.execute(sql, {"name": discussion_topic})
     topic_id = result.fetchone()[0]
 
-    return render_template("updatediscussion.html", discussion_id=id, topic_id=topic_id)
+    return render_template(
+        "updatediscussion.html",
+        discussion_id=id,
+        topic_id=topic_id,
+        discussion=discussion
+    )
 
 
 @app.route("/postdiscussionupdate/<int:id>", methods=["GET", "POST"])
@@ -304,9 +309,6 @@ def removetopic(id):
 
 @app.route("/addcomment/<int:id>", methods=["GET", "POST"])
 def addcomment(id):
-    if len(session) == 0:
-        return redirect("/")
-
     sql = text("SELECT * FROM discussions WHERE id=:id")
     result = db.session.execute(sql, {"id": id})
     discussion = result.fetchone()
@@ -323,7 +325,10 @@ def addcomment(id):
     result = db.session.execute(sql)
     users = result.fetchall()
 
-    logged_user = session["username"]
+    if len(session) > 0:
+        logged_user = session["username"]
+    else:
+        logged_user = None
 
     return render_template(
         "addcomment.html",
@@ -338,6 +343,7 @@ def addcomment(id):
 @app.route("/postcomment/<int:id>", methods=["POST"])
 def postcomment(id):
     if len(session) == 0:
+        flash("Kirjaudu sisään kommentoidaksesi")
         return redirect("/")
 
     content = request.form["content"]
@@ -394,6 +400,7 @@ def search():
 @app.route("/privatetopics", methods=["GET", "POST"])
 def privatetopics():
     if len(session) == 0:
+        flash("Kirjaudu sisään nähdäksesi omat keskustelut")
         return redirect("/")
     
     logged_user_id = session["user_id"]
@@ -451,6 +458,7 @@ def postprivatetopic():
         """INSERT INTO private_discussions (title, creator_id, lastactivity)
         VALUES (:title, :creator_id, NOW()) RETURNING id"""
     )
+    flash("Uusi keskustelu lisätty")
     result = db.session.execute(sql, {"title": title, "creator_id": user_id})
     discussion_id = result.fetchone()[0]
     db.session.commit()

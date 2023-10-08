@@ -1,16 +1,23 @@
 {% extends "base.html" %}
 
 {% block content%}
-    <h2>Muokkaa keskustelua</h2>
-    <form action="/postdiscussionupdate/{{ discussion_id }}" method="POST">
-        <input class="text-input" type="text" name="title" placeholder="Otsikko">
-        <br>
-        <textarea class="form-text" name="comment" rows="3" cols="40" placeholder="Sisältö"></textarea>
-        <br>
-        <input class="form-submit-button" type="submit" value="Tallenna">
-        <br>
-    </form>
-    <form action="/forum/{{ topic_id }}">
-        <input class="form-submit-button" type="submit" value="Takaisin" name="return"/>
-    </form>
+    <div class="inlineblockdiv">
+        <h2>Muokkaa keskustelua</h2>
+    </div>
+    <div class="inlineblockdiv">
+        <form action="/forum/{{ topic_id }}">
+            <input class="form-submit-button" type="submit" value="Takaisin" name="return"/>
+        </form>
+    </div>
+    <div>
+        <form action="/postdiscussionupdate/{{ discussion_id }}" method="POST">
+            <input class="text-input" type="text" name="title" placeholder="Otsikko" value="{{ discussion.title }}">
+            <br>
+            <textarea class="form-text" name="comment" rows="3" cols="40" placeholder="Sisältö">{{ discussion.comment }}</textarea>
+            <br>
+            <input class="form-submit-button" type="submit" value="Tallenna">
+            <br>
+        </form>
+    </div>
+    
 {% endblock %}

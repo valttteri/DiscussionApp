@@ -42,3 +42,9 @@ def get_all(table_name: str):
     result = db.session.execute(sql)
     objects = result.fetchall()
     return objects
+
+def get_all_conditional(table_name: str, column: str, value):
+    sql = text(f"SELECT * FROM {table_name} WHERE {column}=:{value}")
+    result = db.session.execute(sql, {f"{value}": value})
+    objects = result.fetchone()
+    return objects
