@@ -4,25 +4,23 @@ from sqlalchemy.sql import text
 from db import db
 from app import app
 import tools
- 
+
 @app.route("/", methods=["GET", "POST"])
 def index():
-    discussions = tools.get_discussions()
-
-    sql = text("SELECT * FROM users")
-    result = db.session.execute(sql)
-    users = result.fetchall()
-
-    sql = text("SELECT * FROM topics")
-    result = db.session.execute(sql)
-    topics = result.fetchall()
-
-    sql = text("SELECT * FROM comments")
-    result = db.session.execute(sql)
-    comments = result.fetchall()
+    """Front page"""
+    discussions = tools.get_all('discussions')
+    users = tools.get_all('users')
+    topics = tools.get_all('topics')
+    comments = tools.get_all('comments')
 
     if discussions:
-        return render_template("frontpage.html", discussions=discussions, users=users, topics=topics, comments=comments)
+        return render_template(
+            "frontpage.html",
+            discussions=discussions,
+            users=users,
+            topics=topics,
+            comments=comments
+        )
     return render_template("frontpage.html")
 
 @app.route("/closeflash/<int:id>", methods=["GET"])
@@ -110,10 +108,8 @@ def topics():
     result = db.session.execute(sql)
     topics = result.fetchall()
 
-    sql = text("SELECT * FROM discussions")
-    result = db.session.execute(sql)
-    discussions = result.fetchall()
-
+    discussions = tools.get_all('discussions')
+   
     return render_template("topics.html", topics=topics, discussions=discussions)
 
 
@@ -152,13 +148,9 @@ def forum(id):
     result = db.session.execute(sql, {"topic": topic_name})
     discussions = result.fetchall()
 
-    sql = text("SELECT * FROM comments")
-    result = db.session.execute(sql)
-    comments = result.fetchall()
+    comments = tools.get_all('comments')
 
-    sql = text("SELECT * FROM users")
-    result = db.session.execute(sql)
-    users = result.fetchall()
+    users = tools.get_all('users')
 
     return render_template(
         "forum.html",
@@ -319,6 +311,10 @@ def addcomment(id):
     result = db.session.execute(sql, {"id": id})
     discussion = result.fetchone()
 
+    sql = text("SELECT id FROM topics WHERE name=:name")
+    result = db.session.execute(sql, {"name": discussion[1]})
+    return_id = result.fetchone()[0]
+
     sql = text("SELECT * FROM comments WHERE discussion_id=:id")
     result = db.session.execute(sql, {"id": id})
     comments = result.fetchall()
@@ -335,7 +331,7 @@ def addcomment(id):
         comments=comments,
         users=users,
         logged_user=logged_user,
-        return_id=discussion[3],
+        return_id=return_id,
     )
 
 

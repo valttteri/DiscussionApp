@@ -36,8 +36,9 @@ def valid_discussion(title:str, comment:str):
 
     return True
 
-def get_discussions():
-    sql = text("SELECT * FROM discussions")
+def get_all(table_name: str):
+    """Return all objects from a table"""
+    sql = text(f"SELECT * FROM {table_name}")
     result = db.session.execute(sql)
-    discussions = result.fetchall()
-    return discussions
+    objects = result.fetchall()
+    return objects
