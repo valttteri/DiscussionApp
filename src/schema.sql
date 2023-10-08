@@ -50,3 +50,10 @@ CREATE TABLE private_comments (
     time TIMESTAMP,
     creator_name TEXT
 );
+
+INSERT INTO users (username, password, admin) VALUES ("NormalUser", "1234", 'FALSE');
+INSERT INTO users (username, password, admin) VALUES ("AdminUser", "1234", 'TRUE');
+
+INSERT INTO topics (name, lastactivity) VALUES ('Aihepiiri', NOW());
+INSERT INTO discussions (topic, comment, creator_id, time, title) VALUES ('Aihepiiri', 'Keskustelunavaus', 1, NOW(), 'Keskustelun otsikko');
+INSERT INTO comments (discussion_id, content, creator_id, time, creator_name) VALUES (1, 'Kommentti keskustelussa', 1, NOW(), 'NormalUser');
