@@ -26,7 +26,11 @@ lisätä niihin kommentteja. Lähtökohtana on, että valmis sovellus tulee täy
 Keskustelusovelluksen yllä listatuista ensisijaisista ominaisuuksista on toteutettu jollain tasolla jokainen paitsi salaiset alueet. Sen toteuttaminen on vasta alussa. 
 Tällä hetkellä sovellukseen voi siis luoda käyttäjän, ja osallistua eri aihepiirien keskusteluihin. Toistaiseksi vain ylläpitäjät voivat luoda uusia keskustelukanavia sovellukseen.
 Käyttäjälle voi antaa ylläpitäjän oikeudet komentoriviltä asettamalla kohdan 'admin' arvoksi TRUE.\
-Tässä on sovelluksen käynnistysohjeet:
+
+#### Välipalautus 3
+
+Tällä hetkellä sovellus on viimeistelyä vaille valmis. Jokainen ensisijainen ominaisuus on toteutettu.\
+Tässä on sovelluksen testausohjeet:
 
 1. Kloonaa repositorio koneellesi, ja luo sen juureen .env tiedosto. Määritä sen sisältö seuraavanlaiseksi:\
 DATABASE_URL='tietokannan-paikallinen-osoite'\
@@ -37,7 +41,7 @@ $ python3 -m venv venv\
 $ source venv/bin/activate\
 $ pip install -r ./requirements.txt
 
-3. Määritä tietokannan skeema\
+3. Määritä tietokannan skeema. Skeemaan sisältyy taulujen lisäksi 2 käyttäjää sekä 1 kanava, keskustelu ja kommentti\
 $ psql < schema.sql
 
 4. Käynnistä sovellus\
