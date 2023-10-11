@@ -34,11 +34,11 @@ Tässä on sovelluksen testausohjeet:
 
 1. Kloonaa repositorio koneellesi, navigoi sen juureen ja luo sinne .env-tiedosto. Määritä sen sisältö seuraavanlaiseksi:
 ```
-DATABASE_URL='tietokannan-paikallinen-osoite' esim: DATABASE_URL="postgresql://<username>:<password>@localhost:5432/<database-name>"
-SECRET_KEY='salainen-avain' esim: SECRET_KEY="many-characters-here-32-in-total"
+DATABASE_URL='tietokannan-paikallinen-osoite' esim. DATABASE_URL="postgresql://<username>:<password>@localhost:5432/<database-name>"
+SECRET_KEY='salainen-avain' esim. SECRET_KEY="many-characters-here-32-in-total"
 ```
 
-3. Luo virtuaaliympäristö ja aktivoi se\
+3. Luo virtuaaliympäristö ja aktivoi se.
 ```
 ~/src/ $ python3 -m venv venv
 ```
@@ -50,7 +50,7 @@ Windows:
 ```
 ~/src/ $ source venv/Scripts/activate
 ```
-3. Mene projektin juureen ja asenna sovelluksen riippuvuudet
+3. Asenna sovelluksen riippuvuudet.
 ```
 ~/src/ $ pip install -r ./requirements.txt
 ```
@@ -60,7 +60,7 @@ Windows:
 ~/src/ $ psql -U <username> -d <database-name> -f schema.sql
 ```
 
-5. Käynnistä sovellus projetkin juuressa
+5. Käynnistä sovellus.
 ```
 ~/src/ $ flask run
 ```
