@@ -14,11 +14,9 @@
     </div>
 
     <div class="inlineblockdiv">
-        {% if session.admin %}
         <form action="/newtopic">
             <input class="form-submit-button" type="submit" name="newtopic" value="Lisää uusi">
         </form>
-        {% endif %}
     </div>
         <form class="searchbar" action="/search" method="POST">
             <input name="content" placeholder="Etsi sivulta...">

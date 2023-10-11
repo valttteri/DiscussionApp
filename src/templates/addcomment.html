@@ -48,7 +48,7 @@
     </form>
     <div>
         <hr>
-        <p><b>Kommentit:</b></p>
+        <p><b> {{ comments|length }} Kommenttia</b></p>
         {% for comment in comments %}
             <div class="topic">
                 {% for user in users %}

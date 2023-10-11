@@ -2,21 +2,29 @@ from sqlalchemy.sql import text
 from flask import flash
 from db import db
 
-def username_taken(username: str):
+def bad_username(username: str):
     """Check if a username is taken while creating a new account"""
     sql = text("SELECT username from users where username=:username")
     result = db.session.execute(sql, {"username": username})
     user = result.fetchone()
 
-    if not user:
-        return False
-    return True
+    if user:
+        flash("Tämä käyttäjänimi on jo käytössä")
+        return True
+    if len(username) < 5 or len(username) > 20:
+        flash("Käyttäjänimen on oltava 5-20 merkin pituinen")
+        return True
+    
+    return False
+    
 
 def bad_password(password: str):
     """Check if a new password is good enough"""
 
-    if len(password) < 5:
+    if len(password) < 8:
+        flash("Salasanan on oltava vähintään 5 merkkiä pitkä")
         return True
+    
     return False
 
 def valid_discussion(title:str, comment:str):
