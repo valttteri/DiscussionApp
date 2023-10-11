@@ -289,11 +289,13 @@ def remove(id):
 
 @app.route("/removecomment/<int:id>")
 def removecomment(id):
+    if len(session) == 0:
+        return redirect("/")
+
     sql = text("DELETE FROM comments WHERE id=:id RETURNING discussion_id")
     result = db.session.execute(sql, {"id": id})
     discussion = result.fetchone()[0]
     db.session.commit()
-
     return redirect(url_for("addcomment", id=discussion))
 
 @app.route("/removetopic/<int:id>")
@@ -312,7 +314,7 @@ def removetopic(id):
 
 @app.route("/addcomment/<int:id>", methods=["GET", "POST"])
 def addcomment(id):
-    sql = text("SELECT * FROM discussions WHERE id=:id")
+    sql = text("SELECT DISTINCT * FROM discussions WHERE id=:id")
     result = db.session.execute(sql, {"id": id})
     discussion = result.fetchone()
 
@@ -500,16 +502,22 @@ def groupchat(id):
     result = db.session.execute(sql, {"id": id})
     comments = result.fetchall()
 
-    sql = text("""SELECT u.id, u.username, u.admin FROM users u, private_rights r
-               WHERE u.id=r.user_id AND r.discussion_id=:chat_id""")
+    sql = text("""SELECT u.id, u.username, u.admin FROM users u JOIN private_rights r
+               ON u.id=r.user_id AND r.discussion_id=:chat_id""")
     result = db.session.execute(sql, {"chat_id":id})
     users = result.fetchall()
+
+    sql = text("""SELECT COUNT(*) FROM users u JOIN private_rights r
+               ON u.id=r.user_id AND r.discussion_id=:chat_id""")
+    result = db.session.execute(sql, {"chat_id":id})
+    user_count = result.fetchone()[0]
 
     return render_template(
         "groupchat.html",
         chat=chat,
         comments=comments,
-        users=users
+        users=users,
+        user_count=user_count
     )
 
 @app.route("/addprivatecomment/<int:id>", methods=["POST"])

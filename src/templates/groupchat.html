@@ -5,15 +5,13 @@
         <h3>{{ chat.title }}</h3>
     </div>
     <div class="inlineblockdiv">
-        {% for user in users %}
-            {% if loop.index == users|length %}
-               ja {{ user.username }}
-            {% elif loop.index == users|length-1 %}
-                {{ user.username }}
-            {% else %}
-                {{ user.username }},
-            {% endif %}
-        {% endfor %}
+        {% if user_count == 3 %}
+            <p>{{ users[0].username }}, {{ users[1].username }} ja {{ users[2].username }}</p>
+        {% elif user_count > 3 %}
+            <p> {{ users[0].username }}, {{ users[1].username }} ja {{ user_count - 2}} muuta</p>
+        {% else %}
+            <p>{{ users[0].username }} ja {{ users[1].username }}</p>
+        {% endif %}
     </div>
     <div class="inlineblockdiv">
         <form action="/privatetopics">
