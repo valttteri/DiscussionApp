@@ -32,17 +32,36 @@ Käyttäjälle voi antaa ylläpitäjän oikeudet komentoriviltä asettamalla koh
 Tällä hetkellä sovellus on viimeistelyä vaille valmis. Jokainen ensisijainen ominaisuus on toteutettu.\
 Tässä on sovelluksen testausohjeet:
 
-1. Kloonaa repositorio koneellesi, ja luo sen juureen .env tiedosto. Määritä sen sisältö seuraavanlaiseksi:\
-DATABASE_URL='tietokannan-paikallinen-osoite'\
-SECRET_KEY='salainen-avain'
+1. Kloonaa repositorio koneellesi, navigoi sen juureen ja luo sinne .env-tiedosto. Määritä sen sisältö seuraavanlaiseksi:
+```
+DATABASE_URL='tietokannan-paikallinen-osoite' esim: DATABASE_URL="postgresql://<username>:<password>@localhost:5432/<database-name>"
+SECRET_KEY='salainen-avain' esim: SECRET_KEY="many-characters-here-32-in-total"
+```
 
-2. Aktivoi virtuaaliympäristö ja asenna sovelluksen riippuvuudet\
-$ python3 -m venv venv\
-$ source venv/bin/activate\
-$ pip install -r ./requirements.txt
+3. Luo virtuaaliympäristö ja aktivoi se\
+```
+~/src/ $ python3 -m venv venv
+```
+Linux:
+```
+~/src/ $ source venv/bin/activate
+```
+Windows:
+```
+~/src/ $ source venv/Scripts/activate
+```
+3. Mene projektin juureen ja asenna sovelluksen riippuvuudet
+```
+~/src/ $ pip install -r ./requirements.txt
+```
 
-3. Määritä tietokannan skeema. Skeemaan sisältyy taulujen lisäksi 2 käyttäjää sekä 1 kanava, keskustelu ja kommentti\
-$ psql < schema.sql
+5. Määritä tietokannan skeema. Tarkista, että tietokanta jota käytät on tyhjä.
+```
+~/src/ $ psql -U <username> -d <database-name> -f schema.sql
+```
 
-4. Käynnistä sovellus\
-$ flask run
+5. Käynnistä sovellus projetkin juuressa
+```
+~/src/ $ flask run
+```
+
