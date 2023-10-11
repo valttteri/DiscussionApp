@@ -17,6 +17,24 @@
                     <input class="form-submit-button" type="submit" value="Kanavalle" name="return"/>
                 </form>
             </div>
+
+            {% for user in users %}
+                {% if user.id == discussion.creator_id %}
+                    {% if user.username == session.username or session.admin %}
+                    <div style="display: inline-block;">
+                        <form action="/updatediscussion/{{ discussion.id }}">
+                            <input class="form-submit-button" type="submit" value="Muokkaa" name="update"/>
+                        </form>
+                    </div>
+                    <div class="inlineblockdiv">
+                        <form action="/remove/{{ discussion.id }}">
+                            <input class="form-submit-button" type="submit" value="Poista" name="remove"/>
+                        </form>
+                    </div>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+
             <p>{{ discussion.comment }}</p>
         {% endif %}
     {% endfor %}

@@ -8,7 +8,10 @@ import tools
 @app.route("/", methods=["GET", "POST"])
 def index():
     """Front page"""
-    discussions = tools.get_all('discussions')
+    sql = text("SELECT * FROM discussions ORDER BY time DESC")
+    result = db.session.execute(sql)
+    discussions = result.fetchall()
+
     users = tools.get_all('users')
     topics = tools.get_all('topics')
     comments = tools.get_all('comments')
@@ -103,7 +106,7 @@ def savenewuser():
 
 
 @app.route("/topics", methods=["GET", "POST"])
-def topics():
+def topicpage():
     sql = text("SELECT * FROM topics ORDER BY name")
     result = db.session.execute(sql)
     topics = result.fetchall()
@@ -264,7 +267,7 @@ def postdiscussionupdate(id):
         db.session.execute(sql, {"comment": comment, "title": title, "id": id})
         db.session.commit()
 
-    return redirect(url_for("forum", id=topic_id))
+    return redirect(url_for("addcomment", id=id))
 
 @app.route("/remove/<int:id>")
 def remove(id):
@@ -280,8 +283,8 @@ def remove(id):
     sql = text("SELECT id FROM topics WHERE name=:name")
     result = db.session.execute(sql, {"name": discussion_topic})
     return_id = result.fetchone()[0]
-
-    return redirect(url_for("forum", id=return_id))
+    flash("Keskustelu poistettu")
+    return redirect("/")
 
 
 @app.route("/removecomment/<int:id>")
@@ -313,7 +316,7 @@ def addcomment(id):
     result = db.session.execute(sql, {"id": id})
     discussion = result.fetchone()
 
-    sql = text("SELECT id FROM topics WHERE name=:name")
+    sql = text("SELECT DISTINCT id FROM topics WHERE name=:name")
     result = db.session.execute(sql, {"name": discussion[1]})
     return_id = result.fetchone()[0]
 
@@ -321,7 +324,7 @@ def addcomment(id):
     result = db.session.execute(sql, {"id": id})
     comments = result.fetchall()
 
-    sql = text("SELECT id, username, admin FROM users")
+    sql = text("SELECT DISTINCT id, username, admin FROM users")
     result = db.session.execute(sql)
     users = result.fetchall()
 
@@ -342,6 +345,7 @@ def addcomment(id):
 
 @app.route("/postcomment/<int:id>", methods=["POST"])
 def postcomment(id):
+    """Save a new comment"""
     if len(session) == 0:
         flash("Kirjaudu sisään kommentoidaksesi")
         return redirect("/")
@@ -355,7 +359,7 @@ def postcomment(id):
         flash("Comment can't be longer than 300 characters")
         return redirect("/topics")
 
-    sql = text("SELECT id, username FROM users where username=:username")
+    sql = text("SELECT DISTINCT id, username FROM users where username=:username")
     result = db.session.execute(sql, {"username": username})
     user = result.fetchone()
 
@@ -381,9 +385,7 @@ def search():
     result = db.session.execute(sql, {"content": "%" + content + "%"})
     discussions = result.fetchall()
 
-    sql = text("SELECT * FROM discussions")
-    result = db.session.execute(sql)
-    all_discussions = result.fetchall()
+    all_discussions = tools.get_all("discussions")
 
     sql = text("SELECT * FROM comments WHERE content LIKE :content")
     result = db.session.execute(sql, {"content": "%" + content + "%"})
@@ -406,8 +408,8 @@ def privatetopics():
     logged_user_id = session["user_id"]
 
     sql = text(
-        """SELECT d.id, d.title, d.creator_id FROM private_discussions d, private_rights r
-            WHERE d.id=r.discussion_id AND r.user_id=:logged_user_id"""
+        """SELECT d.id, d.title, d.creator_id FROM private_discussions d JOIN private_rights r
+            ON d.id=r.discussion_id AND r.user_id=:logged_user_id"""
     )
     result = db.session.execute(sql, {"logged_user_id": logged_user_id})
     private_discussions = result.fetchall()
@@ -429,7 +431,7 @@ def newprivatetopic():
 
     logged_user = session["user_id"]
 
-    sql = text("SELECT * FROM users WHERE id!=:logged_user")
+    sql = text("SELECT DISTINCT * FROM users WHERE id!=:logged_user")
     result = db.session.execute(sql, {"logged_user": logged_user})
     users = result.fetchall()
 

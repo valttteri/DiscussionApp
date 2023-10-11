@@ -6,8 +6,10 @@
     </div>
     <div class="inlineblockdiv">
         {% for user in users %}
-            {% if loop.last %}
-                ja {{ user.username }}
+            {% if loop.index == users|length %}
+               ja {{ user.username }}
+            {% elif loop.index == users|length-1 %}
+                {{ user.username }}
             {% else %}
                 {{ user.username }},
             {% endif %}
@@ -18,14 +20,14 @@
             <input class="form-submit-button" type="submit" value="Takaisin" name="return"/>
         </form>
     </div>
-
+    
     <div>
         <form class="messageform" action="/addprivatecomment/{{ chat.id }}" method="POST">
             <textarea class="form-text" name="content" rows="3" cols="40" placeholder="Uusi viesti"></textarea>
             <input class="form-submit-button" type="submit" value="Lähetä">
         </form>
     </div>
-    
+
     {% for comment in comments %}
     <div class="removebutton">
         {% if session.admin %}

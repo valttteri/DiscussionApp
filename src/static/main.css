@@ -16,6 +16,7 @@ header {
 
 footer {
     margin-top: .5em;
+    position: relative
 }
 
 /* front page */
@@ -104,8 +105,8 @@ footer {
 .messageform {
     margin: auto;
     display: grid;
-    grid-row-gap: 1px;
     grid-template-columns: 20em;
+    margin-top: .5em;
 }
 
 .userlist { 

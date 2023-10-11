@@ -44,19 +44,6 @@
             {% endfor %}
             <p><a class="forumbutton" href="/addcomment/{{ discussion.id }}">Kommentit ({{ ns.c }})</a></p>
         </div>
-    
-        {% for user in users %}
-            {% if user.id == discussion.creator_id %}
-                {% if user.username == session.username or session.admin %}
-                <div class="inlineblockdiv">
-                    <a class="forumbutton" href="/updatediscussion/{{ discussion.id }}">Muokkaa</a>
-                </div>
-                <div class="inlineblockdiv">
-                    <a class="forumbutton" href="/remove/{{ discussion.id }}">Poista</a>
-                </div>
-                {% endif %}
-            {% endif %}
-        {% endfor %}
     </div>
     {% endfor %}
 
