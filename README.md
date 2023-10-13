@@ -55,7 +55,8 @@ Windows:
 ~/src/ $ pip install -r ./requirements.txt
 ```
 
-5. Määritä tietokannan skeema. Tarkista, että tietokanta jota käytät on tyhjä.
+5. Määritä tietokannan skeema. Tarkista, että tietokanta jota käytät on tyhjä. Skeemaan sisältyy käyttäjät
+NormalUser ja AdminUser joista molempien salasana on 1234.
 ```
 ~/src/ $ psql -U <username> -d <database-name> -f schema.sql
 ```
