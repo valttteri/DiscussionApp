@@ -1,3 +1,4 @@
+"""Import libraries"""
 from flask import redirect, render_template, request, session, url_for, flash
 from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy.sql import text
@@ -28,23 +29,29 @@ def index():
 
 @app.route("/closeflash/<int:id>", methods=["GET"])
 def closeflash(id):
+    """When user closes a notification message, the app redirects the user.
+    This function determines the redirecting address"""
     session.pop('flashes', None)
-    if id == 1:
-        return redirect("/createuser")
-    if id == 2:
-        return redirect("/")
-    if id == 3:
-        return redirect("/topics")
-    if id == 4:
-        return redirect("/privatetopics")
+    address = [
+        "not in use",
+        "/creatuser",
+        "/",
+        "/topics",
+        "/privatetopics",
+        "/newtopic"
+    ]
+
+    return redirect(address[id])
 
 @app.route("/loggingin", methods=["GET", "POST"])
 def loggingin():
+    """Render the login page"""
     return render_template("login.html")
 
 # log in to the application
 @app.route("/login", methods=["POST"])
 def login():
+    """This function is called when a user attempts to log in"""
     username = request.form["username"]
     password = request.form["password"]
     sql = text("SELECT * FROM users WHERE username=:username")
@@ -54,7 +61,7 @@ def login():
     if not user:
         flash("Virheellinen käyttäjänimi")
         return redirect("/")
-    
+
     user_id = user[0]
     admin = user[-1]
     password_hash = user.password
@@ -70,6 +77,7 @@ def login():
 
 @app.route("/logout")
 def logout():
+    """Log out a user"""
     username = session["username"]
     flash(f"Kirjattiin ulos käyttäjä {username}")
     del session["username"]
@@ -79,10 +87,12 @@ def logout():
 
 @app.route("/createuser", methods=["GET", "POST"])
 def createuser():
+    """Render the registration page"""
     return render_template("createaccount.html")
 
 @app.route("/savenewuser", methods=["GET", "POST"])
 def savenewuser():
+    """Save a new user to the database, if input is valid"""
     username = request.form["username"]
 
     if tools.bad_username(username):
@@ -105,34 +115,41 @@ def savenewuser():
 
 @app.route("/topics", methods=["GET", "POST"])
 def topicpage():
+    """Render the discussion channels"""
     sql = text("SELECT * FROM topics ORDER BY name")
     result = db.session.execute(sql)
     topics = result.fetchall()
 
     discussions = tools.get_all('discussions')
-   
+
     return render_template("topics.html", topics=topics, discussions=discussions)
 
 
 @app.route("/newtopic", methods=["GET", "POST"])
 def newtopic():
+    """Render the page for creating a new discussion channel"""
     return render_template("newtopic.html")
 
 @app.route("/posttopic", methods=["POST"])
 def posttopic():
+    """Save a new discussion channel to the database, if input is valid"""
     if len(session) == 0:
         flash("Kirjaudu sisään luodaksesi kanavan")
         return redirect("/")
     topic = request.form["topic"]
 
+    if tools.invalid_topic(topic):
+        return redirect("/newtopic")
+
     sql = text("INSERT INTO topics (name, lastactivity) VALUES (:name, NOW())")
     db.session.execute(sql, {"name": topic})
     db.session.commit()
-
+    flash(f"Luotiin kanava {topic}")
     return redirect("/topics")
 
 @app.route("/forum/<int:id>", methods=["GET", "POST"])
 def forum(id):
+    """Render the discussions of a specific topic"""
     sql = text("SELECT name, id FROM topics WHERE id=:id")
     result = db.session.execute(sql, {"id": id}).fetchone()
     topic_name = result[0]
@@ -155,14 +172,13 @@ def forum(id):
         topic_id=topic_id,
     )
 
-
-# add a new discussion
 @app.route("/newdiscussion/<int:id>", methods=["GET", "POST"])
-def new(id):
+def newdiscussion(id):
+    """Create a new discussion"""
     if len(session) == 0:
         flash("Kirjaudu sisään lisätäksesi uuden keskustelun")
         return redirect("/topics")
-     
+
     sql = text("SELECT DISTINCT id, name FROM topics WHERE id=:id")
     result = db.session.execute(sql, {"id": id}).fetchone()
 
@@ -173,9 +189,9 @@ def new(id):
 
 @app.route("/postdiscussion/<int:id>", methods=["POST"])
 def postdiscussion(id):
+    """Save a new discussion to database"""
     if len(session) == 0:
         return redirect("/")
-    """Save a new discussion to database"""
 
     sql = text("SELECT name FROM topics WHERE id=:id")
     result = db.session.execute(sql, {"id": id})
@@ -260,7 +276,7 @@ def postdiscussionupdate(id):
     return redirect(url_for("addcomment", id=id))
 
 @app.route("/remove/<int:id>")
-def remove(id):
+def removediscussion(id):
     """Remove a discussion"""
     if len(session) == 0:
         return redirect("/")
@@ -274,6 +290,7 @@ def remove(id):
 
 @app.route("/removecomment/<int:id>")
 def removecomment(id):
+    """Remove a comment"""
     if len(session) == 0:
         return redirect("/")
 
@@ -291,10 +308,11 @@ def removetopic(id):
     if not session["admin"]:
         return redirect("/topics")
 
-    sql = text("DELETE FROM topics WHERE id=:id")
-    db.session.execute(sql, {"id": id})
+    sql = text("DELETE FROM topics WHERE id=:id RETURNING name")
+    result = db.session.execute(sql, {"id": id}).fetchone()
+    topic = result[0]
     db.session.commit()
-
+    flash(f"Kanava {topic} poistettu")
     return redirect("/topics")
 
 @app.route("/addcomment/<int:id>", methods=["GET", "POST"])
@@ -364,6 +382,7 @@ def postcomment(id):
 
 @app.route("/search", methods=["POST"])
 def search():
+    """Render search results"""
     content = request.form["content"]
 
     sql = text(
@@ -388,10 +407,11 @@ def search():
 
 @app.route("/privatetopics", methods=["GET", "POST"])
 def privatetopics():
+    """Render group chats"""
     if len(session) == 0:
         flash("Kirjaudu sisään nähdäksesi omat keskustelut")
         return redirect("/")
-    
+
     logged_user_id = session["user_id"]
 
     sql = text(
@@ -413,6 +433,7 @@ def privatetopics():
 
 @app.route("/newprivatetopic", methods=["GET", "POST"])
 def newprivatetopic():
+    """Create a new group chat"""
     if len(session) == 0:
         return redirect("/")
 
@@ -426,6 +447,7 @@ def newprivatetopic():
 
 @app.route("/postprivatetopic", methods=["GET", "POST"])
 def postprivatetopic():
+    """Save a group chat to database, if input is valid"""
     if len(session) == 0:
         return redirect("/")
 
@@ -442,7 +464,7 @@ def postprivatetopic():
     if len(title) > 50:
         flash("Keskustelun nimi voi olla enintään 50 merkkiä pitkä")
         return redirect("/privatetopics")
- 
+
     sql = text(
         """INSERT INTO private_discussions (title, creator_id, lastactivity)
         VALUES (:title, :creator_id, NOW()) RETURNING id"""
@@ -451,7 +473,7 @@ def postprivatetopic():
     result = db.session.execute(sql, {"title": title, "creator_id": user_id})
     discussion_id = result.fetchone()[0]
     db.session.commit()
-    
+
     sql = text(
         """INSERT INTO private_rights (user_id, discussion_id)
         VALUES (:user_id, :discussion_id)"""
@@ -471,6 +493,7 @@ def postprivatetopic():
 
 @app.route("/removeprivatetopic/<int:id>")
 def removeprivatetopic(id):
+    """Remove a groupchat"""
     sql = text("DELETE FROM private_discussions WHERE id=:id")
     result = db.session.execute(sql, {"id": id})
     db.session.commit()
@@ -479,6 +502,7 @@ def removeprivatetopic(id):
 
 @app.route("/groupchat/<int:id>", methods=["GET"])
 def groupchat(id):
+    """Render a certain groupchat"""
     if len(session) == 0:
         return redirect("/")
 
@@ -510,6 +534,7 @@ def groupchat(id):
 
 @app.route("/addprivatecomment/<int:id>", methods=["POST"])
 def addprivatecomment(id):
+    """Send a message to a group chat"""
     if len(session) == 0:
         return redirect("/")
 
@@ -538,9 +563,10 @@ def addprivatecomment(id):
 
 @app.route("/removeprivatecomment/<int:id>")
 def removeprivatecomment(id):
+    """Remove a message from a group chat"""
     if len(session) == 0:
         return redirect("/")
-    
+
     sql = text("DELETE FROM private_comments WHERE id=:id RETURNING discussion_id")
     result = db.session.execute(sql, {"id": id})
     discussion = result.fetchone()[0]

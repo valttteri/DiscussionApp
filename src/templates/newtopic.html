@@ -1,6 +1,13 @@
 {% extends "base.html" %}
 
 {% block content%}
+{% for message in get_flashed_messages() %}
+    <div class="flashmessage">
+        <b>{{ message }}</b>
+        <a class="flashbutton" href="/closeflash/{{ 5 }}"><b>x</b></a>
+    </div>
+{% endfor %}
+
 <div>
     <h2>Uusi kanava</h2>
     <form action="/posttopic" method="POST">
