@@ -46,23 +46,11 @@
                     {% set ns.c = ns.c + 1 %}
                 {% endif %}
             {% endfor %}
-            <p><a class="forumbutton" href="/addcomment/{{ discussion.id }}">Kommentit ({{ ns.c }})</a></p>
+            <a class="iconbutton" href="/addcomment/{{ discussion.id }}">
+                <i class="material-icons">comment</i>
+                <p style="position: absolute; left:auto; display: inline-block; margin:0; padding:0">({{ ns.c }})</p>
+            </a>
         </div>
-    
-        <!--
-        {% for user in users %}
-            {% if user.id == discussion.creator_id %}
-                {% if user.username == session.username or session.admin %}
-                <div class="inlineblockdiv">
-                    <a class="forumbutton" href="/updatediscussion/{{ discussion.id }}">Muokkaa</a>
-                </div>
-                <div class="inlineblockdiv">
-                    <a class="forumbutton" href="/remove/{{ discussion.id }}">Poista</a>
-                </div>
-                {% endif %}
-            {% endif %}
-        {% endfor %}
-            -->
     </div>
     {% endfor %}
 

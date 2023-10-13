@@ -55,6 +55,15 @@ footer {
     background-color: #5abae0;
 }
 
+.iconbutton {
+    text-decoration: none;
+    color: black;
+}
+
+.iconbutton:hover {
+    color: rgb(88, 88, 88);
+}
+
 .forumbutton:hover {
     color: rgb(88, 88, 88);
     background-color: #2bade0;

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content%}
+    <h3>Tietoja sovelluksesta</h3>
+    <div style="padding-left: .5em;">
+        <p>
+            Sovellus luotiin syyskuussa 2023
+        </p>
+        <p>
+            Käyttäjämäärä: {{ total_users }}
+        </p>
+        <p>
+            Kanavia yhteensä: {{ total_topics }}
+        </p>
+        <p>
+            Keskusteluita yhteensä: {{ total_discussions }}
+        </p>
+        <p>
+            Kommentteja yhteensä: {{ total_comments }}
+        </p>
+    </div>
+
+{% endblock %}

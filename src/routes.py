@@ -303,6 +303,7 @@ def removecomment(id):
 
 @app.route("/removetopic/<int:id>")
 def removetopic(id):
+    """Remove a topic"""
     if len(session) == 0:
         return redirect("/")
     if not session["admin"]:
@@ -317,6 +318,7 @@ def removetopic(id):
 
 @app.route("/addcomment/<int:id>", methods=["GET", "POST"])
 def addcomment(id):
+    """Render a certain discussion"""
     sql = text("SELECT DISTINCT * FROM discussions WHERE id=:id")
     result = db.session.execute(sql, {"id": id})
     discussion = result.fetchone()
@@ -495,7 +497,7 @@ def postprivatetopic():
 def removeprivatetopic(id):
     """Remove a groupchat"""
     sql = text("DELETE FROM private_discussions WHERE id=:id")
-    result = db.session.execute(sql, {"id": id})
+    db.session.execute(sql, {"id": id})
     db.session.commit()
 
     return redirect("/privatetopics")
@@ -573,3 +575,27 @@ def removeprivatecomment(id):
     db.session.commit()
 
     return redirect(url_for("groupchat", id=discussion))
+
+@app.route("/info")
+def info():
+    """Render the info page"""
+
+    sql = text("SELECT COUNT(*) FROM comments")
+    total_comments = db.session.execute(sql).fetchone()[0]
+
+    sql = text("SELECT COUNT(*) FROM discussions")
+    total_discussions = db.session.execute(sql).fetchone()[0]
+
+    sql = text("SELECT COUNT(*) FROM topics")
+    total_topics = db.session.execute(sql).fetchone()[0]
+
+    sql = text("SELECT COUNT(*) FROM users")
+    total_users = db.session.execute(sql).fetchone()[0]
+
+    return render_template(
+        "info.html",
+        total_comments=total_comments,
+        total_discussions=total_discussions,
+        total_topics=total_topics,
+        total_users=total_users
+    )

@@ -45,7 +45,10 @@
                         {% set ns.c = ns.c + 1 %}
                     {% endif %}
                 {% endfor %}
-                <p><a class="forumbutton" href="/addcomment/{{ discussion.id }}">Kommentit ({{ ns.c }})</a></p>
+                <a class="iconbutton" href="/addcomment/{{ discussion.id }}">
+                    <i class="material-icons">comment</i>
+                    <p style="position: absolute; left:auto; display: inline-block; margin:0; padding:0">({{ ns.c }})</p>
+                </a>
             </div>
         </div>
     {% endfor %}

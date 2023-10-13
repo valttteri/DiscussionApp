@@ -3,6 +3,8 @@
 <head>
     <title>whatsgood</title>
     <link rel="stylesheet" href="../static/main.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
@@ -13,6 +15,7 @@
         <li><a href="/">Etusivu</a></li>
         <li><a href="/topics">Kanavat</a></li>
         <li><a href="/privatetopics">Omat keskustelut</a></li>
+        <li><a href="/info">Info</a></li>
         {% if session.username %}
         <li>
             <p>Kirjautunut käyttäjällä {{ session.username }}
