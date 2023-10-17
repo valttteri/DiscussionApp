@@ -25,43 +25,51 @@ lisätä niihin kommentteja. Lähtökohtana on, että valmis sovellus tulee täy
 #### Välipalautus 2
 Keskustelusovelluksen yllä listatuista ensisijaisista ominaisuuksista on toteutettu jollain tasolla jokainen paitsi salaiset alueet. Sen toteuttaminen on vasta alussa. 
 Tällä hetkellä sovellukseen voi siis luoda käyttäjän, ja osallistua eri aihepiirien keskusteluihin. Toistaiseksi vain ylläpitäjät voivat luoda uusia keskustelukanavia sovellukseen.
-Käyttäjälle voi antaa ylläpitäjän oikeudet komentoriviltä asettamalla kohdan 'admin' arvoksi TRUE.\
+Käyttäjälle voi antaa ylläpitäjän oikeudet komentoriviltä asettamalla kohdan 'admin' arvoksi TRUE.
 
 #### Välipalautus 3
 
 Tällä hetkellä sovellus on viimeistelyä vaille valmis. Jokainen ensisijainen ominaisuus on toteutettu.\
 Tässä on sovelluksen testausohjeet:
 
-1. Kloonaa repositorio koneellesi, navigoi sen juureen ja luo sinne .env-tiedosto. Määritä sen sisältö seuraavanlaiseksi:
+1. Kloonaa repositorio koneellesi ja luo projektikansioon .env-tiedosto.
 ```
-DATABASE_URL='tietokannan-paikallinen-osoite' esim. DATABASE_URL="postgresql://<username>:<password>@localhost:5432/<database-name>"
-SECRET_KEY='salainen-avain' esim. SECRET_KEY="many-characters-here-32-in-total"
+~/ $ git clone https://github.com/valttteri/Tsoha2023.git
+~/ $ cd Tsoha2023
+~/Tsoha2023/ $ touch .env
+```
+
+2. Määritä .env-tiedoston sisältö seuraavanlaiseksi:
+```
+DATABASE_URL='tietokannan-paikallinen-osoite' esim. DATABASE_URL='postgresql://<username>:<password>@localhost:5432/<database-name>'
+SECRET_KEY='salainen-avain' esim. SECRET_KEY='many-characters-here-32-in-total'
 ```
 
 3. Luo virtuaaliympäristö ja aktivoi se.
 ```
-~/src/ $ python3 -m venv venv
+~/Tsoha2023/ $ python -m venv venv
 ```
 Linux:
 ```
-~/src/ $ source venv/bin/activate
+~/Tsoha2023/ $ source venv/bin/activate
 ```
 Windows:
 ```
-~/src/ $ source venv/Scripts/activate
+~/Tsoha2023/ $ source venv/Scripts/activate
 ```
-3. Asenna sovelluksen riippuvuudet.
+4. Asenna sovelluksen riippuvuudet.
 ```
-~/src/ $ pip install -r ./requirements.txt
+~/Tsoha2023/ $ pip install -r ./requirements.txt
 ```
 
-5. Määritä tietokannan skeema. Tarkista, että tietokanta jota käytät on tyhjä. Skeemaan sisältyy käyttäjät
-NormalUser ja AdminUser joista molempien salasana on 1234.
+5. Siirry src-kansioon ja määritä tietokannan skeema esim. seuraavalla tavalla. Tarkista, että tietokanta jota käytät on tyhjä.
+Skeemaan sisältyy käyttäjät NormalUser ja AdminUser joista molempien salasana on 1234.
 ```
+~/Tsoha2023/ $ cd src
 ~/src/ $ psql -U <username> -d <database-name> -f schema.sql
 ```
 
-5. Käynnistä sovellus.
+6. Käynnistä sovellus.
 ```
 ~/src/ $ flask run
 ```
