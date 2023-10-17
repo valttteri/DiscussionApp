@@ -238,6 +238,12 @@ def updatediscussion(id):
     result = db.session.execute(sql, {"id": id})
     discussion = result.fetchone()
     discussion_topic = discussion[1]
+    discussion_creator = discussion[3]
+
+    user_id = session["user_id"]
+    is_admin = session["admin"]
+    if discussion_creator != user_id and not is_admin:
+        return redirect("/")
 
     sql = text("SELECT id FROM topics WHERE name=:name")
     result = db.session.execute(sql, {"name": discussion_topic})
@@ -278,6 +284,15 @@ def postdiscussionupdate(id):
 def removediscussion(id):
     """Remove a discussion"""
     if len(session) == 0:
+        return redirect("/")
+    
+    user_id = session["user_id"]
+    is_admin = session["admin"]
+
+    sql = text("SELECT title from discussions WHERE id=:id AND creator_id=:user_id")
+    result = db.session.execute(sql, {"id": id, "user_id": user_id}).fetchone()
+
+    if not result and not is_admin:
         return redirect("/")
 
     sql = text("DELETE FROM discussions WHERE id=:id RETURNING topic")
@@ -610,7 +625,6 @@ def info():
     
     sql = text("SELECT * from discussions where id=:id")
     top_discussion = db.session.execute(sql, {"id": most_commented_id}).fetchone()
-    print(top_discussion)
 
     users = tools.get_all("users")
 
