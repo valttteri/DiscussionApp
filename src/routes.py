@@ -48,7 +48,6 @@ def loggingin():
     """Render the login page"""
     return render_template("login.html")
 
-# log in to the application
 @app.route("/login", methods=["POST"])
 def login():
     """This function is called when a user attempts to log in"""
@@ -496,6 +495,9 @@ def postprivatetopic():
 @app.route("/removeprivatetopic/<int:id>")
 def removeprivatetopic(id):
     """Remove a groupchat"""
+    if len(session) == 0:
+        return redirect("/")
+
     sql = text("DELETE FROM private_discussions WHERE id=:id")
     db.session.execute(sql, {"id": id})
     db.session.commit()
@@ -506,6 +508,14 @@ def removeprivatetopic(id):
 def groupchat(id):
     """Render a certain groupchat"""
     if len(session) == 0:
+        return redirect("/")
+    
+    user_id = session["user_id"]
+
+    sql = text("""SELECT d.id from private_discussions d, private_rights r
+               where d.id=:id and r.user_id=:user_id""")
+    result = db.session.execute(sql, {"id": id, "user_id": user_id}).fetchone()
+    if not result:
         return redirect("/")
 
     sql = text("SELECT * FROM private_discussions WHERE id=:id")
@@ -592,10 +602,25 @@ def info():
     sql = text("SELECT COUNT(*) FROM users")
     total_users = db.session.execute(sql).fetchone()[0]
 
+    sql = text("""SELECT discussion_id, COUNT(*) from comments GROUP BY discussion_id
+               ORDER BY COUNT(*) DESC""")
+    result = db.session.execute(sql).fetchone()
+    most_commented_id = result[0]
+    comment_count = result[1]
+    
+    sql = text("SELECT * from discussions where id=:id")
+    top_discussion = db.session.execute(sql, {"id": most_commented_id}).fetchone()
+    print(top_discussion)
+
+    users = tools.get_all("users")
+
     return render_template(
         "info.html",
         total_comments=total_comments,
         total_discussions=total_discussions,
         total_topics=total_topics,
-        total_users=total_users
+        total_users=total_users,
+        top_discussion=top_discussion,
+        users=users,
+        comment_count = comment_count
     )

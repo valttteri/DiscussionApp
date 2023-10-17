@@ -4,20 +4,38 @@
     <h3>Tietoja sovelluksesta</h3>
     <div style="padding-left: .5em;">
         <p>
-            Sovellus luotiin syyskuussa 2023
+            <b>Käyttäjämäärä:</b> {{ total_users }}
         </p>
         <p>
-            Käyttäjämäärä: {{ total_users }}
+            <b>Kanavia yhteensä:</b> {{ total_topics }}
         </p>
         <p>
-            Kanavia yhteensä: {{ total_topics }}
+            <b>Keskusteluita yhteensä:</b> {{ total_discussions }}
         </p>
         <p>
-            Keskusteluita yhteensä: {{ total_discussions }}
+            <b>Kommentteja yhteensä:</b> {{ total_comments }}
         </p>
         <p>
-            Kommentteja yhteensä: {{ total_comments }}
+            <b>Kommentoiduin keskustelu:</b>
         </p>
+    </div>
+    <div class="topic">
+        {% for user in users %}
+        {% if user.id == top_discussion.creator_id %}
+            {% if user.admin %}
+                <p><u><b>(ADMIN) {{ user.username }}</b>
+            {% else %}
+                <p><u><b>{{ user.username }}</b>
+            {% endif %}
+            {% endif %}
+        {% endfor %}
+                
+        {{ top_discussion.time.strftime("%d.%m.%Y %H:%M:%S") }}</u></p>
+        <p style="margin:0;"><b>{{ top_discussion.title }}</b>
+        <br>
+        {{ top_discussion.comment }}</p>  
+        
+        <p><b> {{comment_count}} kommenttia </b></p>
     </div>
 
 {% endblock %}
