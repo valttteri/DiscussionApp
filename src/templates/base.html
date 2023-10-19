@@ -11,11 +11,10 @@
 
 <nav>
     <ul>
-        <li id="title"><h1>whatsgood</h1></li>
-        <li><a href="/">Etusivu</a></li>
-        <li><a href="/topics">Kanavat</a></li>
-        <li><a href="/privatetopics">Omat keskustelut</a></li>
-        <li><a href="/info">Info</a></li>
+        <li><a id="title" href="/"><h1 style="display: inline-block;">whatsgood</h1></a></li>
+        <li><a class="navbar" href="/topics">Kanavat</a></li>
+        <li><a class="navbar" href="/privatetopics">Omat keskustelut</a></li>
+        <li><a class="navbar" href="/info">Info</a></li>
         {% if session.username %}
         <li>
             <p>Kirjautunut käyttäjällä {{ session.username }}
@@ -25,11 +24,11 @@
             </p>
         </li>
         <li>
-            <a href="/logout">Kirjaudu ulos</a>
+            <a class="navbar" href="/logout">Kirjaudu ulos</a>
         </li>
         {% else %}
-        <li><a href="/loggingin">Kirjaudu sisään</a></li>
-        <li><a href="/createuser">Rekisteröidy</a></li>
+        <li><a class="navbar" href="/loggingin">Kirjaudu sisään</a></li>
+        <li><a class="navbar" href="/createuser">Rekisteröidy</a></li>
         {% endif %}
     </ul>
 </nav>

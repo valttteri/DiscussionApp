@@ -34,7 +34,7 @@ def closeflash(id):
     session.pop('flashes', None)
     address = [
         "not in use",
-        "/creatuser",
+        "/createuser",
         "/",
         "/topics",
         "/privatetopics",
@@ -93,6 +93,7 @@ def createuser():
 def savenewuser():
     """Save a new user to the database, if input is valid"""
     username = request.form["username"]
+    is_admin = request.form.getlist("admin")
 
     if tools.bad_username(username):
         return redirect("/createuser")
@@ -103,9 +104,15 @@ def savenewuser():
         return redirect("/createuser")
 
     hash_value = generate_password_hash(password)
-    sql = text(
-        "INSERT INTO users (username, password, admin) VALUES (:username, :password, 'FALSE')"
-    )
+
+    if is_admin:
+        sql = text(
+            "INSERT INTO users (username, password, admin) VALUES (:username, :password, 'TRUE')"
+        )
+    else:
+        sql = text(
+            "INSERT INTO users (username, password, admin) VALUES (:username, :password, 'FALSE')"
+        )
     flash("Luotiin uusi käyttäjä")
     db.session.execute(sql, {"username": username, "password": hash_value})
     db.session.commit()

@@ -129,13 +129,19 @@ footer {
 
 /* base */
 #title {
+    text-decoration: none;
     margin-right: 1.5em;
     font-size: 1.3em;
     color: #1429c5;
     font-family: 'Signika', sans-serif;
-    padding-bottom: 10px;
+    padding-bottom: 1px;
     -webkit-text-stroke-color: black;
     -webkit-text-stroke-width: .05em;
+}
+
+#title:hover {
+    color: #4c5cd4;
+    text-shadow:#f3f3f3 1px 0 10px;
 }
 
 nav {
@@ -151,7 +157,7 @@ nav li {
     margin-right: .3em
 }
 
-nav li a{
+.navbar {
     text-decoration: none;
     border: solid;
     border-radius: .5em;
@@ -160,7 +166,7 @@ nav li a{
     background-color: white;
 }
 
-nav li a:hover {
+.navbar:hover {
     background-color: rgb(226, 226, 226);
 }
 
