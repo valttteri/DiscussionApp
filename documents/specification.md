@@ -29,4 +29,4 @@ Käyttäjälle voi antaa ylläpitäjän oikeudet komentoriviltä asettamalla koh
 
 #### Välipalautus 3
 
-Tällä hetkellä sovellus on viimeistelyä vaille valmis. Jokainen ensisijainen ominaisuus on toteutettu.\
+Tällä hetkellä sovellus on viimeistelyä vaille valmis. Jokainen ensisijainen ominaisuus on toteutettu.
