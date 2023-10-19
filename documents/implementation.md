@@ -3,8 +3,7 @@
 Projektini aihe on keskustelusovellus. Sovelluksesta löytyy keskustelukanavia, joilla käyttäjät voivat jutella erilaisista asioista.
 Sovellukseen voi luoda oman käyttäjän, jonka jälkeen voi kirjautua sisään ja ulos nappia painamalla.
 Käyttäjät voivat luoda uusia kanavia, sekä keskusteluita kanaville. Itse luotuja keskusteluita voi muokata ja poistaa. Keskusteluihin voi jättää kommentteja.
-Käyttäjät voivat myös luoda ryhmäkeskusteluita, joihin vain tietyt henkilöt pääsevät käsiksi. Ylläpitäjiin ei päde käyttäjäkohtaiset rajoitukset. He voivat poistaa
-poistaa minkä tahansa kommentin, keskustelun tai kanavan. Sovelluksen rakenne:
+Käyttäjät voivat myös luoda ryhmäkeskusteluita, joihin vain tietyt henkilöt pääsevät käsiksi. Ylläpitäjiin ei päde käyttäjäkohtaiset rajoitukset. He voivat poistaa minkä tahansa kommentin, keskustelun tai kanavan. Sovelluksen rakenne:
 
 **Etusivu**
 - Etusivulla näkyy kaikki sovellukseen luodut keskustelut
