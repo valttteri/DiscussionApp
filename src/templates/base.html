@@ -17,13 +17,6 @@
         <li><a class="navbar" href="/info">Info</a></li>
         {% if session.username %}
         <li>
-            <p>Kirjautunut käyttäjällä {{ session.username }}
-            {% if session.admin %}
-                (ylläpitäjä)
-            {% endif %}
-            </p>
-        </li>
-        <li>
             <a class="navbar" href="/logout">Kirjaudu ulos</a>
         </li>
         {% else %}

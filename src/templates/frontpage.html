@@ -9,11 +9,22 @@
 </div>
 {% endfor %}
 
+<form class="searchbar" action="/search" method="POST">
+    <input name="content" placeholder="Etsi sivulta...">
+    <input type="submit" value="Etsi">
+</form>
+
 {% if not session.username %}
 <div>
     <p><b>
         Tervetuloa! Täällä keskustellaan kaikesta ja kaikista.
         Kirjaudu sisään tai luo uusi käyttäjä.
+    </b></p>
+</div>
+{% else %}
+<div>
+    <p><b>
+        Olet kirjautunut sisään käyttäjällä {{ session.username }}
     </b></p>
 </div>
 {% endif %}

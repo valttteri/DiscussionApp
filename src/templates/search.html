@@ -7,12 +7,6 @@
             <p>Tällä hakusanalla ei löytynyt mitään</p>
         {% endif %}
     </div>
-    <div class="inlineblockdiv">
-        <form action="/topics">
-            <input class="form-submit-button" type="submit" value="Takaisin" name="topics"/>
-        </form>
-    </div>
-
         {% for discussion in discussions %}
             <div class="topic">
                 <p><b>{{ discussion.title }}</b></p>
