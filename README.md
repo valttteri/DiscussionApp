@@ -1,36 +1,41 @@
 ## Tietokannat ja Web-ohjelmointi, syksy 2023
 
-Tämä on Valtteri Aholan repositorio kurssille Tietokannat ja Web-ohjelmointi. Projektini aihe on yksi kurssisivulla mainituista esimerkeistä, eli keskustelusovellus.
+Tämän projektin aihe on keskustelusovellus.
+
+#### Lopullinen palautus
+
+Projektini aihe on keskustelusovellus. Sovelluksesta löytyy keskustelukanavia, joilla käyttäjät voivat jutella erilaisista asioista.
+Käyttäjät voivat luoda uusia kanavia, sekä keskusteluita kanaville. Omia keskusteluita voi muokata ja poistaa. Keskusteluihin voi jättää kommentteja.
+Käyttäjät voivat myös luoda ryhmäkeskusteluita, joihin vain tietyt henkilöt pääsevät käsiksi. Sovellukseen voi luoda oman käyttäjän, 
+jonka jälkeen voi kirjautua sisään ja ulos nappia painamalla. Ylläpitäjiin ei päde käyttäjäkohtaiset rajoitukset. He voivat poistaa
+poistaa minkä tahansa kommentin, keskustelun tai kanavan. Sovelluksen rakenne:
+
+Etusivu
+- Etusivulla näkyy kaikki sovellukseen luodut keskustelut
+- Keskustelun kommentteja pääsee lukemaan kuvaketta klikkaamalla
+- Jos käyttäjä on kirjautunut sisään, siitä näkyy maininta sivun yläosassa
+- Sivun ylänurkasta löytyy hakutoiminto, jonka avulla voi etsiä yksittäisiä keskusteluita tai kommentteja
+
+Kanavat
+- Tällä sivulla näkyy lista sovelluksen keskustelukanavista
+- Jokaisen kanavan kohdalla näkyy, montako keskustelua se sisältää ja milloin se on viimeksi ollut aktiivinen
+- Kanavan keskusteluita voi mennä lukemaan kanavan nimeä klikkaamalla
+- Käyttäjä voi luoda uusia kanavia, mutta vain ylläpitäjä voi poistaa niitä
+- Sivun ylänurkasta löytyy sama hakutoiminto kuin etusivulta
+
+Omat keskustelut
+- Sivulla on lista ryhmäkeskusteluista, joiden jäsen käyttäjä on
+- Käyttäjä voi luoda tai poistaa ryhmäkeskusteluja
+
+Info
+- Sivulla näkyy muutama tilasto sovelluksesta sekä sovelluksen kommentoiduin keskustelu
+
+Sovelluksessa on keskustelukanavia, joilla käyttäjät voivat keskustella erilaisista asioista. Sovellukseen voi tehdä oman
+käyttäjän, jonka jälkeen voi luoda keskustelukanavia, keskusteluita ja kommentteja. Käyttäjät voivat poistaa ja muokata omia keskustelui
 Sovelluksen etusivulla on keskusteluketjuja, joissa käsitellään erilaisia aiheita. Kun on luonut sovellukseen käyttäjän, on mahdolista luoda keskusteluita ja
 lisätä niihin kommentteja. Lähtökohtana on, että valmis sovellus tulee täyttämään kurssisivulla mainitut vaatimukset. Jos aikaa jää, niin toteutan sovellukseen lisää ominaisuuksia.
 
-#### Ensisijaiset ominaisuudet (kurssisivua lainaten):
-- Käyttäjä voi kirjautua sisään ja ulos sekä luoda uuden tunnuksen.
-- Käyttäjä näkee sovelluksen etusivulla listan alueista sekä jokaisen alueen ketjujen ja viestien määrän ja viimeksi lähetetyn viestin ajankohdan.
-- Käyttäjä voi luoda alueelle uuden ketjun antamalla ketjun otsikon ja aloitusviestin sisällön.
-- Käyttäjä voi kirjoittaa uuden viestin olemassa olevaan ketjuun.
-- Käyttäjä voi muokata luomansa ketjun otsikkoa sekä lähettämänsä viestin sisältöä. Käyttäjä voi myös poistaa ketjun tai viestin.
-- Käyttäjä voi etsiä kaikki viestit, joiden osana on annettu sana.
-- Ylläpitäjä voi lisätä ja poistaa keskustelualueita.
-- Ylläpitäjä voi luoda salaisen alueen ja määrittää, keillä käyttäjillä on pääsy alueelle.
-
-#### Mahdolliset lisäominaisuudet:
-- Ylläpitäjä voi antaa bannit käyttäjälle tai poistaa käyttäjän tilin kokonaan.
-- Käyttäjät voivat antaa tykkäyksiä muiden käyttäjien kommenteille
-- Käyttäjät voivat lisätä muita käyttäjiä kavereiksi
-- Kaverit voivat lähettää toisilleen yksityisviestejä
-- Käyttäjä voi nappia painamalla päästä tarkastelemaan omaa profiiliaan. Profiilissa näkyy tietoja käyttäjästä, esim. keskusteluketjut, joissa käyttäjä on mukana,
-  lähetettyjen viestien määrä, saatujen tykkäyksien määrä yms.
-
-#### Välipalautus 2
-Keskustelusovelluksen yllä listatuista ensisijaisista ominaisuuksista on toteutettu jollain tasolla jokainen paitsi salaiset alueet. Sen toteuttaminen on vasta alussa. 
-Tällä hetkellä sovellukseen voi siis luoda käyttäjän, ja osallistua eri aihepiirien keskusteluihin. Toistaiseksi vain ylläpitäjät voivat luoda uusia keskustelukanavia sovellukseen.
-Käyttäjälle voi antaa ylläpitäjän oikeudet komentoriviltä asettamalla kohdan 'admin' arvoksi TRUE.
-
-#### Välipalautus 3
-
-Tällä hetkellä sovellus on viimeistelyä vaille valmis. Jokainen ensisijainen ominaisuus on toteutettu.\
-Tässä on sovelluksen testausohjeet:
+Sovellusta ei voi testata tuotannossa. Testausohjeet
 
 1. Kloonaa repositorio koneellesi ja luo projektikansioon .env-tiedosto.
 ```
