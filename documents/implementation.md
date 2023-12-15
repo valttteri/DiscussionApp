@@ -11,12 +11,16 @@ Käyttäjät voivat myös luoda ryhmäkeskusteluita, joihin vain tietyt henkilö
 - Jos käyttäjä on kirjautunut sisään, siitä näkyy maininta sivun yläosassa
 - Sivun ylänurkasta löytyy hakutoiminto, jonka avulla voi etsiä yksittäisiä keskusteluita tai kommentteja
 
+<img src="../images/frontpage.png" width="700"/>
+
 **Kanavat**
 - Tällä sivulla näkyy lista sovelluksen keskustelukanavista
 - Jokaisen kanavan kohdalla näkyy, montako keskustelua se sisältää ja milloin se on viimeksi ollut aktiivinen
 - Kanavan keskusteluita voi mennä lukemaan kanavan nimeä klikkaamalla
 - Käyttäjä voi luoda uusia kanavia, mutta vain ylläpitäjä voi poistaa niitä
 - Sivun ylänurkasta löytyy sama hakutoiminto kuin etusivulta
+
+<img src="../images/discussion_page.png" width="700"/>
 
 **Omat keskustelut**
 - Sivulla on lista ryhmäkeskusteluista, joiden jäsen käyttäjä on
